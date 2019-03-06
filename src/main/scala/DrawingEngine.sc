@@ -24,7 +24,7 @@ val RectangleCommand = "Rectangle(1,2,3,4)"
 val TextAtCommand = "Text-At(1,2,50%)"
 val DrawCommand = "Draw(black, Circle(2,3,1))"
 val boundingBoxCommand = "Bounding-Box(2,1,2,3)"
-val fillCommand = "Fill(black,Circle(2,2,1))"
+val fillCommand = "Fill(b,Circle(2,2,1))"
 val errorCommand = "Fill(black, black)"
 
 
@@ -45,10 +45,37 @@ def ParseFromString(command: String): Figure  = command match {
   case _ => Error() // could not parse command
 }
 
-//val l = ParseFromString(LineCommand)
-//val c = ParseFromString(CircleCommand)
-//val r = ParseFromString(RectangleCommand)
-//val t = ParseFromString(TextAtCommand)
-//val bB = ParseFromString(boundingBoxCommand)
+/*val l = ParseFromString(LineCommand)
+val c = ParseFromString(CircleCommand)
+val r = ParseFromString(RectangleCommand)
+val t = ParseFromString(TextAtCommand)
+val bB = ParseFromString(boundingBoxCommand)*/
 val fill = ParseFromString(fillCommand)
-val error = ParseFromString(errorCommand)
+//val error = ParseFromString(errorCommand)
+
+
+
+def generateAbstractSyntaxTree(commands: String): List[Figure] = {
+  commands.split("\\n").map(cmd => ParseFromString(cmd)).toList
+}
+
+
+val builder = StringBuilder.newBuilder
+builder.append(LineCommand)
+builder.append(System.getProperty("line.separator"))
+builder.append(LineCommand)
+builder.append(System.getProperty("line.separator"))
+builder.append(fillCommand)
+builder.append(System.getProperty("line.separator"))
+builder.append(boundingBoxCommand)
+
+
+val tree = generateAbstractSyntaxTree(builder.toString())
+
+// A valid syntax tree should only have one Bounding-box and not more
+def IsSyntaxTreeValid(array: List[Figure]): Boolean =
+  array.collect{case fig:BoundingBox => fig}.length == 1
+
+
+val isValid = IsSyntaxTreeValid(tree)
+
