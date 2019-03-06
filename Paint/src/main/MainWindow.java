@@ -9,6 +9,7 @@ import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 
@@ -54,10 +55,14 @@ public class MainWindow
       SpringLayout springLayout = new SpringLayout();
       frame.getContentPane().setLayout(springLayout);
 
-      JTextPane scriptEditor = new JTextPane();
+      JTextArea scriptEditor = new JTextArea();
       springLayout.putConstraint(SpringLayout.NORTH, scriptEditor, 10, SpringLayout.NORTH, frame.getContentPane());
       springLayout.putConstraint(SpringLayout.SOUTH, scriptEditor, -108, SpringLayout.SOUTH, frame.getContentPane());
       springLayout.putConstraint(SpringLayout.EAST, scriptEditor, -10, SpringLayout.EAST, frame.getContentPane());
+      
+      scriptEditor.setLineWrap(true);
+      scriptEditor.setWrapStyleWord(true);
+      
       frame.getContentPane().add(scriptEditor);
 
       JButton btnDraw = new JButton("Draw");
