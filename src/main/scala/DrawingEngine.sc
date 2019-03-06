@@ -10,21 +10,21 @@ case class Fill(c: String, figure: Figure) extends Figure;
 case class Error() extends Figure;
 
 
-val LineRegex = "Line\\((\\d+),(\\d+),(\\d+),(\\d+)\\)".r
-val CircleRegex = "Circle\\((\\d+),(\\d+),(\\d+)\\)".r
-val RectangleRegex = "Rectangle\\((\\d+),(\\d+),(\\d+),(\\d+)\\)".r
-val TextAtRegex = "Text-At\\((\\d+),(\\d+),(.*)\\)".r
+val LineRegex = "\\((?i)Line\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
+val CircleRegex = "\\((?i)Circle\\((\\d+) (\\d+)\\) (\\d+)\\)".r
+val RectangleRegex = "\\((?i)Rectangle\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
+val TextAtRegex = "\\((?i)Text-At\\((\\d+) (\\d+)\\) (.*)\\)".r
 //val DrawRegex = "Draw\\(([a-zA-Z]*),(.*+?)\\)".r
-val BoundingBoxRegex = "Bounding-Box\\((\\d+),(\\d+),(\\d+),(\\d+)\\)".r
-val FillRegex = "Fill\\(([a-zA-Z]*),(.*)\\)".r
+val BoundingBoxRegex = "\\((?i)Bounding-Box\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
+val FillRegex = "\\((?i)Fill\\(([a-zA-Z]*) (.*)\\)\\)".r
 
-val LineCommand = "Line(2,3,4,5)"
-val CircleCommand = "Circle(1,2,3)"
-val RectangleCommand = "Rectangle(1,2,3,4)"
-val TextAtCommand = "Text-At(1,2,50%)"
+val LineCommand = "(LinE(2 3) (4 5))"
+val CircleCommand = "(Circle(1 2) 2)"
+val RectangleCommand = "(Rectangle(1 2) (3 4))"
+val TextAtCommand = "(Text-At(1 2) 50%)"
 val DrawCommand = "Draw(black, Circle(2,3,1))"
-val boundingBoxCommand = "Bounding-Box(2,1,2,3)"
-val fillCommand = "Fill(b,Circle(2,2,1))"
+val boundingBoxCommand = "(Bounding-Box(2 1) (2 3))"
+val fillCommand = "(FILL(b Circle(2 2) 1)))"
 val errorCommand = "Fill(black, black)"
 
 
@@ -45,11 +45,11 @@ def ParseFromString(command: String): Figure  = command match {
   case _ => Error() // could not parse command
 }
 
-/*val l = ParseFromString(LineCommand)
+val l = ParseFromString(LineCommand)
 val c = ParseFromString(CircleCommand)
 val r = ParseFromString(RectangleCommand)
 val t = ParseFromString(TextAtCommand)
-val bB = ParseFromString(boundingBoxCommand)*/
+val bB = ParseFromString(boundingBoxCommand)
 val fill = ParseFromString(fillCommand)
 //val error = ParseFromString(errorCommand)
 
