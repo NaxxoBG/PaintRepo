@@ -42,7 +42,7 @@ def ParseFromString(command: String): Figure  = command match {
   case BoundingBoxRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => BoundingBox(x1, y1, x2, y2)
   case TextAtRegex(AsInt(x), AsInt(y), t) => TextAt(x, y, t)
   case FillRegex(c, figure) => Fill(c, ParseFromString(figure))
-  case DrawRegex(c, t) => Draw(c, t.split(' ').map(cmd => ParseFromString(cmd)).toList)
+  case DrawRegex(c, t) => Draw(c, t.split("\\) (" ).map(cmd => ParseFromString(cmd)).toList)
   case _ => throw new NoSuchMethodException// could not parse command
 }
 
