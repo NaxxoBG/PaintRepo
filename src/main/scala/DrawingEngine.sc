@@ -22,10 +22,12 @@ val LineCommand = "(LinE(2 3) (4 5))"
 val CircleCommand = "(Circle(1 2) 2)"
 val RectangleCommand = "(Rectangle(1 2) (3 4))"
 val TextAtCommand = "(Text-At(1 2) 50%)"
-val DrawCommand = "(Draw(black, Circle(2,3,1)))"
 val boundingBoxCommand = "(Bounding-Box(2 1) (2 3))"
 val fillCommand = "(Fill(black Circle(2 2) 1))"
 val errorCommand = "Fill(black, black)"
+
+val DrawCommand = "(Draw(black (Circle(2 3) 1) (Circle(1 2) 3)))"
+val listPattern = "\\((.*)\\)".r
 
 
 object AsInt {
@@ -42,7 +44,7 @@ def ParseFromString(command: String): Figure  = command match {
   case BoundingBoxRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => BoundingBox(x1, y1, x2, y2)
   case TextAtRegex(AsInt(x), AsInt(y), t) => TextAt(x, y, t)
   case FillRegex(c, figure) => Fill(c, ParseFromString(figure))
-  case DrawRegex(c, t) => Draw(c, t.split("\\) (" ).map(cmd => ParseFromString(cmd)).toList)
+  case DrawRegex(c, t) => Draw(c, t.split("\\) \\(" ).map(cmd => ParseFromString(cmd)).toList)
   case _ => throw new NoSuchMethodException// could not parse command
 }
 
