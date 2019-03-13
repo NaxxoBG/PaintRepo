@@ -1,6 +1,6 @@
 import java.awt.image.BufferedImage
 import java.awt.Color
-
+//Bitmap class taken from https://rosettacode.org/wiki/Bitmap#Scala
 class RgbBitmap(val width:Int, val height:Int) {
   val image=new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
 
