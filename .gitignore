@@ -181,3 +181,7 @@ Temporary Items
 .idea/sbt.xml
 .idea/vcs.xml
 
+.classpath
+.idea/scala_settings.xml
+.project
+src/main/scala/RegexTest.sc
