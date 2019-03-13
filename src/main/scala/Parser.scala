@@ -8,6 +8,7 @@ object Parser {
   case class Draw(c: String, list: List[Figure]) extends Figure;
   case class BoundingBox(x1: Int, y1: Int, x2: Int, y2: Int) extends Figure;
   case class Fill(c: String, figure: Figure) extends Figure;
+  case class Nil() extends Figure;
   case class Error() extends Figure;
 
   val LineRegex = "\\((?i)Line\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
@@ -40,15 +41,9 @@ object Parser {
   }
 
 
-  //val draw = ParseFromString(DrawCommand)
-  //val error = ParseFromString(errorCommand)
-
-
   def generateAbstractSyntaxTree(commands: String): List[Figure] = {
     commands.split("\\n").map(cmd => ParseFromString(cmd)).toList
   }
-
-
 
 
   // A valid syntax tree should only have one Bounding-box and not more
@@ -59,10 +54,11 @@ object Parser {
 
 
 
-
   def DrawSyntaxTree(commands: String): Unit = {
     val syntaxTree = generateAbstractSyntaxTree(commands);
-    //if(IsSyntaxTreeValid(syntaxTree))
+    if(IsSyntaxTreeValid(syntaxTree)){
+
+    }
     //Draw(syntaxTree)
   }
 }
