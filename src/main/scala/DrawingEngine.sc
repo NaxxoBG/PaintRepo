@@ -31,20 +31,20 @@ val errorCommand = "Fill(black, black)"
 
 
 object AsInt {
-  def unapply(s: String) = try{ Some(s.toInt) } catch {
-    case e: NumberFormatException => None
+  def unapply(s: String): Option[Int] = try{ Some(s.toInt) } catch {
+    case _: NumberFormatException => None
   }
 }
 
 
 def ParseFromString(command: String): Figure  = command match {
   case LineRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => Line(x1, y1, x2, y2)
-  case CircleRegex(AsInt(x), AsInt(y), AsInt(r)) => Circle(x, y, r)
+  case CircleRegex(AsInt(x), AsInt(y), AsInt(i)) => Circle(x, y, i)
   case RectangleRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => Rectangle(x1, y1, x2, y2)
   case BoundingBoxRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => BoundingBox(x1, y1, x2, y2)
-  case TextAtRegex(AsInt(x), AsInt(y), t) => TextAt(x, y, t)
-  case FillRegex(c, figure) => Fill(c, ParseFromString(figure))
-  case DrawRegex(c, t) => Draw(c, validator.findAllIn(t).map(cmd => ParseFromString(cmd)).toList)
+  case TextAtRegex(AsInt(x), AsInt(y), te) => TextAt(x, y, te)
+  case FillRegex(b, figure) => Fill(b, ParseFromString(figure))
+  case DrawRegex(v, p) => Draw(v, validator.findAllIn(p).map(cmd => ParseFromString(cmd)).toList)
   case _ => throw new Exception("Could not parse command") // could not parse command
 }
 
@@ -87,7 +87,7 @@ val isValid = IsSyntaxTreeValid(tree)
 
 
 def DrawSyntaxTree(commands: String):Unit={
-  val syntaxTree = generateAbstractSyntaxTree(commands);
+  val syntaxTree = generateAbstractSyntaxTree(commands)
   //if(IsSyntaxTreeValid(syntaxTree))
     //Draw(syntaxTree)
 }
