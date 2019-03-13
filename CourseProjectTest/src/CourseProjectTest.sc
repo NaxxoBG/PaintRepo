@@ -27,7 +27,7 @@ class DrawingEngine {
   sealed abstract class FigureList();
   case class LstNil() extends FigureList;
   case class Cons(f:Figure,lst:FigureList) extends FigureList;
-
+//Bresenham's line algorithm taken from https://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#Scala
   def bresenham(bm:RgbBitmap, x0:Int, y0:Int, x1:Int, y1:Int, c:Color)={
     val dx=math.abs(x1-x0)
     val sx=if (x0<x1) 1 else -1
@@ -50,7 +50,7 @@ class DrawingEngine {
     for((x,y) <- it)
       bm.setPixel(x, y, c)
   }
-
+//Midpoint circle algorithm taken from https://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#Scala
   def midpoint(bm:RgbBitmap, x0:Int, y0:Int, radius:Int, c:Color)={
     var f=1-radius
     var ddF_x=1
