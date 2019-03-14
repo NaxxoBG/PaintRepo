@@ -181,7 +181,10 @@ Temporary Items
 .idea/sbt.xml
 .idea/vcs.xml
 
-.classpath
-.idea/scala_settings.xml
 .project
+.classpath
+.idea/modules/PaintRepo-build.iml
+.idea/modules/PaintRepo-build.iml
+.idea/scala_settings.xml
+.idea/modules/PaintRepo-build.iml
 src/main/scala/RegexTest.sc
