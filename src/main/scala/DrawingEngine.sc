@@ -24,10 +24,12 @@ val LineCommand = "(LinE(2 3) (4 5))"
 val CircleCommand = "(Circle(1 2) 2)"
 val RectangleCommand = "(Rectangle(1 2) (3 4))"
 val TextAtCommand = "(Text-At(1 2) 50%)"
-val DrawCommand = "(Draw(black, Circle(2,3,1)))"
 val boundingBoxCommand = "(Bounding-Box(2 1) (2 3))"
 val fillCommand = "(Fill(black Circle(2 2) 1))"
 val errorCommand = "Fill(black, black)"
+
+val DrawCommand = "(Draw(black (Circle(2 3) 1) (Circle(1 2) 3)))"
+val listPattern = "\\((.*)\\)".r
 
 
 object AsInt {

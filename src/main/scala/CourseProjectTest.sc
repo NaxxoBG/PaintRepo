@@ -1,7 +1,8 @@
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-import Parser.{Circle, Figure, Line, Rectangle}
+import Parser._
+
 
 //Bitmap class taken from https://rosettacode.org/wiki/Bitmap#Scala
 class RgbBitmap(val width:Int, val height:Int) {
@@ -18,20 +19,21 @@ class RgbBitmap(val width:Int, val height:Int) {
 }
 
 class DrawingEngine {
-
   sealed abstract class FigureList();
   case class LstNil() extends FigureList;
   case class Cons(f:Figure,lst:FigureList) extends FigureList;
 
   //Bresenham's line algorithm taken from https://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#Scala
+  //Coordinates representing the bounding box are needed to ensure that nothing is drawn outside the bounding box
   def bresenham(bm:RgbBitmap, x0:Int, y0:Int, x1:Int, y1:Int, c:Color)={
-    val dx=math.abs(x1-x0)
-    val sx=if (x0<x1) 1 else -1
+    val dx= math.abs(x1-x0) //find the difference between the pixels on the x-axis
+    val sx = if (x0<x1) 1 else -1
     val dy=math.abs(y1-y0)
     val sy=if (y0<y1) 1 else -1
 
     def it=new Iterator[(Int, Int)]{
-      var x=x0; var y=y0
+      var x = x0;
+      var y = y0;
       var err=(if (dx>dy) dx else -dy)/2
       def next={
         val res=(x,y)
@@ -95,7 +97,7 @@ class DrawingEngine {
       }
       case Circle(x,y,r)=> midpoint(bitmap,x,y,r,new Color(0,0,0))
       /*case (TextAt(x,y,s),"TEXT-AT")=>
-      case (BoundingBox(x1,y1,x2,y2),"BOUNDING-BOX")=>{
+      case BoundingBox(x1,y1,x2,y2)=>{
           bresenham(bitmap,x1,y1,x1,y2,new Color(0,0,0))
           bresenham(bitmap,x1,y1,x2,y1,new Color(0,0,0))
           bresenham(bitmap,x1,y2,x2,y2,new Color(0,0,0))
@@ -113,6 +115,13 @@ class DrawingEngine {
 
   Draw(Cons(L,LstNil()),bitMapping)
   Draw(Cons(C,LstNil()),bitMapping)
+
+  import java.io.File
+
+  import javax.imageio.ImageIO
+
+  ImageIO.write(bitMapping.image, "jpg", new File("test.jpg"))
+
 
   def Fill(c:String,g:Figure): Unit ={
 
