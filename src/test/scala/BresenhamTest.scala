@@ -46,5 +46,14 @@ class BresenhamTest extends FunSuite{
     assert(expectedPointList == pointList)
   }
 
-
+  //Todo: This test is failing and should be fixed
+  test("LineTestNot45degrees")
+  {
+    val expectedPointList = PointListCons(Coord(20,10), PointListCons(Coord(21,11), PointListCons(Coord(22,12), PointListCons(Coord(23,12), PointListCons(Coord(24,13),
+      PointListCons(Coord(25, 14), PointListCons(Coord(26,15), PointListCons(Coord(27,16), PointListCons(Coord(28, 16),
+        PointListCons(Coord(29,17), PointListCons(Coord(30, 18), PointListNil())))))))))))
+    val pointList = BresenhamLineAlgorithm.LineWrapper(20,10, 30,18)
+    printPointList(pointList)
+    assert(expectedPointList == pointList)
+  }
 }

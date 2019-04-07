@@ -14,7 +14,7 @@ object BresenhamLineAlgorithm {
 
   def FindDErr(dx: Int, dy: Int): Double = {
     if(dx != 0)
-      math.abs(dy / dx).toDouble
+      math.abs(((dy).toDouble / dx.toDouble))
     else
       dy
   }
