@@ -27,24 +27,59 @@ object BresenhamLineAlgorithm{
     case Cons(hd,tl) => Cons(hd,concat(tl,list2))
   }
 
-  def LineRc(list:IntList,x0:Int,y0:Int,x1:Int,y1:Int,err:Double): IntList = //list match
+  def LineRc(x0:Int,y0:Int,x1:Int,y1:Int,err:Double,list:IntList): IntList = //list match
   {
     val dx = DeltaCalc(x0,x1)
     val dy = DeltaCalc(y0,y1)
     val tlist = concat(list,Coord(x0,y0))
     if(dx == 0 && dy ==0){tlist}//Done
     if(dx == 0 || dy == 0){
-      LineRc(tlist,x0+Sign(dx),y0+Sign(dy),x1,y1,err)
+      LineRc(x0+Sign(dx),y0+Sign(dy),x1,y1,err,tlist)
     } //is vertical or horizontal
 
     val derr = FindDErr(dx,dy)
     val ploterr = err+derr
 
     if(ploterr >=0.5)
-      LineRc(tlist,x0+Sign(dx),y0+Sign(dy),x1,y1,ploterr-1.0)
+      LineRc(x0+Sign(dx),y0+Sign(dy),x1,y1,ploterr-1.0,tlist)
     else
-      LineRc(tlist,x0+1,y0,x1,y1,ploterr)
+      LineRc(x0+Sign(dx),y0,x1,y1,ploterr,tlist)
 
+  }
+
+  def midpoint(x0:Int,y0:Int,radius:Int,xRest:Int,list:IntList):IntList={
+    var x = xRest
+    var y = radius
+    var tlist = list
+    if(x < y)
+      {
+        var f = 1-radius
+        var ddF_x = 1
+        var ddF_y = -2*radius
+        tlist = concat(tlist,Coord(x0,y0+radius))
+        tlist = concat(tlist,Coord(x0,y0-radius))
+        tlist = concat(tlist,Coord(x0+radius,y0))
+        tlist = concat(tlist,Coord(x0-radius,y0))
+        if(f >= 0)
+          {
+            y -= 1
+            ddF_y +=2
+            f+=ddF_y
+          }
+        x+=1
+        ddF_x+=2
+        f+=ddF_x
+        tlist = concat(tlist,Coord(x0+x,y0+y))
+        tlist = concat(tlist,Coord(x0-x,y0+y))
+        tlist = concat(tlist,Coord(x0+x,y0-y))
+        tlist = concat(tlist,Coord(x0-x,y0-y))
+        tlist = concat(tlist,Coord(x0+y,y0+x))
+        tlist = concat(tlist,Coord(x0-y,y0+x))
+        tlist = concat(tlist,Coord(x0+y,y0-x))
+        tlist = concat(tlist,Coord(x0-y,y0-x))
+        midpoint(x0,y0,radius,x,tlist)
+      }
+    return tlist
   }
 
   /*def DrawLine(list: IntList,x0:Int,y0:Int,x1:Int,y1:Int)={
