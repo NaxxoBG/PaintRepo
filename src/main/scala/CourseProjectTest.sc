@@ -1,53 +1,72 @@
-import java.awt.Color
+import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
 
 import Parser._
+import java.io.File
 
+import BresenhamLineAlgorithm._
+import javax.imageio.ImageIO
 
 //Bitmap class taken from https://rosettacode.org/wiki/Bitmap#Scala
 class RgbBitmap(val width:Int, val height:Int) {
-  val image=new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
+  val image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
 
   def fill(c:Color)={
-    val g=image.getGraphics()
+    val g = image.getGraphics
     g.setColor(c)
     g.fillRect(0, 0, width, height)
   }
 
-  def setPixel(x:Int, y:Int, c:Color)=image.setRGB(x, y, c.getRGB())
-  def getPixel(x:Int, y:Int)=new Color(image.getRGB(x, y))
+  def setPixel(x:Int, y:Int, c:Color)= image.setRGB(x, y, c.getRGB())
+  def getPixel(x:Int, y:Int) = new Color(image.getRGB(x, y))
+  def writeText(txt: String, x:Int, y:Int) = {
+    val g = image.getGraphics
+    g.setFont(new Font("TimesRoman", Font.PLAIN, 14));
+    g.setColor(Color.BLACK)
+    g.drawString(txt, x, y)
+  }
 }
 
-class DrawingEngine {
-  sealed abstract class FigureList();
-  case class LstNil() extends FigureList;
-  case class Cons(f:Figure,lst:FigureList) extends FigureList;
+  def pointDrawer(pointList: PointList, bm:RgbBitmap, c: Color):Unit = pointList match {
+    case PointListNil() => Unit
+    case PointListCons(hd, tl) => bm.setPixel(hd.x, hd.y, c); pointDrawer(tl, bm, c)
+  }
+
+  def DrawLine(bm:RgbBitmap, c: Color, x0: Int, y0: Int, x1: Int, y1: Int): Unit = {
+    pointDrawer(LineWrapper(x0, y0, x1, y1), bm, c)
+  }
+
+  def DrawCircle(bm:RgbBitmap, c:Color, x0:Int, y0:Int, radius:Int): Unit = {
+    pointDrawer(midpointWrapper(x0, y0, radius), bm, c)
+  }
+
+
 
   //Bresenham's line algorithm taken from https://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#Scala
   //Coordinates representing the bounding box are needed to ensure that nothing is drawn outside the bounding box
-  def bresenham(bm:RgbBitmap, x0:Int, y0:Int, x1:Int, y1:Int, c:Color)={
-    val dx= math.abs(x1-x0) //find the difference between the pixels on the x-axis
-    val sx = if (x0<x1) 1 else -1
-    val dy=math.abs(y1-y0)
-    val sy=if (y0<y1) 1 else -1
-
-    def it=new Iterator[(Int, Int)]{
-      var x = x0;
-      var y = y0;
-      var err=(if (dx>dy) dx else -dy)/2
-      def next={
-        val res=(x,y)
-        val e2=err;
-        if (e2 > -dx) {err-=dy; x+=sx}
-        if (e2<dy) {err+=dx; y+=sy}
-        res;
-      }
-      def hasNext = (sx*x <= sx*x1 && sy*y <= sy*y1)
-    }
-
-    for((x,y) <- it)
-      bm.setPixel(x, y, c)
-  }
+//  def bresenham(bm:RgbBitmap, x0:Int, y0:Int, x1:Int, y1:Int, c:Color)={
+//    val dx= math.abs(x1-x0) //find the difference between the pixels on the x-axis
+//    val sx = if (x0<x1) 1 else -1
+//    val dy=math.abs(y1-y0)
+//    val sy=if (y0<y1) 1 else -1
+//
+//    def it=new Iterator[(Int, Int)]{
+//      var x = x0;
+//      var y = y0;
+//      var err=(if (dx>dy) dx else -dy)/2
+//      def next={
+//        val res=(x,y)
+//        val e2=err;
+//        if (e2 > -dx) {err-=dy; x+=sx}
+//        if (e2<dy) {err+=dx; y+=sy}
+//        res;
+//      }
+//      def hasNext = (sx*x <= sx*x1 && sy*y <= sy*y1)
+//    }
+//
+//    for((x,y) <- it)
+//      bm.setPixel(x, y, c)
+//  }
   //Midpoint circle algorithm taken from https://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#Scala
   def midpoint(bm:RgbBitmap, x0:Int, y0:Int, radius:Int, c:Color)={
     var f=1-radius
@@ -55,6 +74,10 @@ class DrawingEngine {
     var ddF_y= -2*radius
     var x=0
     var y=radius
+
+    try {
+
+
 
     bm.setPixel(x0, y0+radius, c)
     bm.setPixel(x0, y0-radius, c)
@@ -82,49 +105,46 @@ class DrawingEngine {
       bm.setPixel(x0+y, y0-x, c)
       bm.setPixel(x0-y, y0-x, c)
     }
-  }
 
-  def Draw(figureList: FigureList, bitmap: RgbBitmap): Unit = figureList match{
-    case LstNil() => return;
-    case Cons(f,lst) => {f match{
-      //case Nil() => return
-      case Line(x1,y1,x2,y2) => bresenham(bitmap,x1,y1,x2,y2,new Color(0,0,0))
-      case Rectangle(x1,y1,x2,y2) => {
-        bresenham(bitmap,x1,y1,x1,y2,new Color(0,0,0))
-        bresenham(bitmap,x1,y1,x2,y1,new Color(0,0,0))
-        bresenham(bitmap,x1,y2,x2,y2,new Color(0,0,0))
-        bresenham(bitmap,x2,y1,x2,y2,new Color(0,0,0))
-      }
-      case Circle(x,y,r)=> midpoint(bitmap,x,y,r,new Color(0,0,0))
-      /*case (TextAt(x,y,s),"TEXT-AT")=>
-      case BoundingBox(x1,y1,x2,y2)=>{
-          bresenham(bitmap,x1,y1,x1,y2,new Color(0,0,0))
-          bresenham(bitmap,x1,y1,x2,y1,new Color(0,0,0))
-          bresenham(bitmap,x1,y2,x2,y2,new Color(0,0,0))
-          bresenham(bitmap,x2,y1,x2,y2,new Color(0,0,0))
-        }*/
-      case _ => return
+    } catch {
+      case e: ArrayIndexOutOfBoundsException => e.printStackTrace()
     }
-      Draw(lst, bitmap)}
   }
 
-  val bitMapping = new RgbBitmap(0,0)
-  val L = Line(1,1,5,5)
-  val C = Circle(1,1,8)
+  def DrawImg(figureList: List[Figure], bitmap: RgbBitmap): Unit = figureList match{
+    case List() => Unit
+    case f::tl =>
+      f match {
+        case Line(x1,y1,x2,y2) => DrawLine(bitmap,Color.BLACK, x1,y1,x2,y2)
+        case Rectangle(x1,y1,x2,y2) => {
+          DrawLine(bitmap, Color.BLACK, x1, y1, x1, y2)
+          DrawLine(bitmap, Color.BLACK, x1, y1, x2, y1)
+          DrawLine(bitmap, Color.BLACK, x1, y2, x2, y2)
+          DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
+        }
+        //case Circle(x, y, r)=> DrawCircle(bitmap, Color.BLACK, x, y, r)
+        case Circle(x, y, r) => midpoint(bitmap, x, y, r, new Color(0,0,0))
+        case TextAt(x, y, s) => bitmap.writeText(s, x, y)
+        case BoundingBox(x1,y1,x2,y2) =>
+          DrawLine(bitmap, Color.BLACK, x1, y1, x1, y2)
+          DrawLine(bitmap, Color.BLACK, x1, y1, x2, y1)
+          DrawLine(bitmap, Color.BLACK, x1, y2, x2, y2)
+          DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
+        case _ => return
+      }
+      DrawImg(tl, bitmap)
+  }
+
+  def Fill(c:String, g:Figure): Unit ={
+
+  }
+
+  val bitMapping = new RgbBitmap(500,500)
+  val L = Line(20, 20, 400, 400)
+  val C = Circle(200, 200, 100)
+  val T = TextAt(100, 100, "Hello World")
   bitMapping.image.createGraphics()
+  bitMapping.fill(Color.WHITE)
 
-  Draw(Cons(L,LstNil()),bitMapping)
-  Draw(Cons(C,LstNil()),bitMapping)
-
-  import java.io.File
-
-  import javax.imageio.ImageIO
-
-  ImageIO.write(bitMapping.image, "jpg", new File("test.jpg"))
-
-
-  def Fill(c:String,g:Figure): Unit ={
-
-  }
-
-}
+  DrawImg(List(L, C, T, Nil()), bitMapping)
+  ImageIO.write(bitMapping.image, "jpg", new File(s"${System.getenv("HOMEPATH")}\\Desktop\\tester.jpg"))
