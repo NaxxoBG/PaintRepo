@@ -139,10 +139,20 @@ class RgbBitmap(val width:Int, val height:Int) {
 
   }
 
+  def testDraw(): BufferedImage = {
+    val bitMapping = new RgbBitmap(500,500)
+    val L = Line(20, 20, 400, 400)
+    val C = Circle(200, 200, 100)
+    val T = TextAt(100, 100, "Hello Again World ")
+    bitMapping.image.createGraphics()
+    bitMapping.fill(Color.WHITE)
+    return bitMapping.image
+  }
+
   val bitMapping = new RgbBitmap(500,500)
   val L = Line(20, 20, 400, 400)
   val C = Circle(200, 200, 100)
-  val T = TextAt(100, 100, "Hello World")
+  val T = TextAt(100, 100, "Hello Again World ")
   bitMapping.image.createGraphics()
   bitMapping.fill(Color.WHITE)
 

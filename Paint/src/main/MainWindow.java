@@ -1,5 +1,4 @@
 package main;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -57,6 +56,7 @@ public class MainWindow
 		frame.getContentPane().setLayout(springLayout);
 
 		JTextArea scriptEditor = new JTextArea();
+		scriptEditor.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		springLayout.putConstraint(SpringLayout.NORTH, scriptEditor, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, scriptEditor, -108, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, scriptEditor, -10, SpringLayout.EAST, frame.getContentPane());
