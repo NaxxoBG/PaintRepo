@@ -13,6 +13,8 @@
     <envs />
     <setting name="testKind" value="All in package" />
     <setting name="package" value="" />
+    <buffered bufClass="BresenhamTest" />
+    <buffered bufClass="ParserTester" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
