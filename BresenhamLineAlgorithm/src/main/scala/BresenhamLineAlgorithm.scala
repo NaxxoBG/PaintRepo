@@ -23,8 +23,8 @@ object BresenhamLineAlgorithm{
   }
 
   def concat(list1: IntList, list2: IntList): IntList = list1 match{
-    case Nil() => list2
-    case Cons(hd,tl) => Cons(hd,concat(tl,list2))
+    case Nil() | Coord(_, _) => list2
+    case Cons(tr:Coord, tl) => Cons(tr,concat(tl,list2))
   }
 
   def LineRc(x0:Int,y0:Int,x1:Int,y1:Int,err:Double,list:IntList): IntList = //list match
