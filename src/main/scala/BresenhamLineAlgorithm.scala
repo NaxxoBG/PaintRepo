@@ -94,9 +94,4 @@ object BresenhamLineAlgorithm {
   def midpointWrapper(x0: Int, y0: Int, radius: Int): PointList = {
     midpoint(x0, y0, radius, 0, PointListNil())
   }
-
-  /*def DrawLine(list: IntList,x0:Int,y0:Int,x1:Int,y1:Int)={
-    LineRc(list,x0,y0,x1,y1,0.0,y0)
-  }*/
-
 }
