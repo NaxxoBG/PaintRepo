@@ -48,9 +48,11 @@ object Parser {
   }
 
 
+  //The bounding box should be the first element of the list
   // A valid syntax tree should only have one Bounding-box and not more
   // A valid syntax is also one with no parsing errors
   def IsSyntaxTreeValid(array: List[Figure]): Boolean =
+    array.head.isInstanceOf[BoundingBox] &&
     array.collect { case fig: BoundingBox => fig }.length == 1 &&
       array.collect { case fig: Error => fig }.isEmpty
 

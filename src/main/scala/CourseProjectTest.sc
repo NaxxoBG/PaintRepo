@@ -32,41 +32,16 @@ class RgbBitmap(val width:Int, val height:Int) {
     case PointListCons(hd, tl) => bm.setPixel(hd.x, hd.y, c); pointDrawer(tl, bm, c)
   }
 
-  def DrawLine(bm:RgbBitmap, c: Color, x0: Int, y0: Int, x1: Int, y1: Int): Unit = {
+  def DrawLine(bm:RgbBitmap, c: Color, x0: Int, y0: Int, x1: Int, y1: Int: Unit = {
     pointDrawer(LineWrapper(x0, y0, x1, y1), bm, c)
   }
 
   def DrawCircle(bm:RgbBitmap, c:Color, x0:Int, y0:Int, radius:Int): Unit = {
-    pointDrawer(midpointWrapper(x0, y0, radius), bm, c)
+    pointDrawer(midpointWrapper(x0, y0, radius), bm, c, x_low, y_low, x_high, y_high)
   }
 
 
 
-  //Bresenham's line algorithm taken from https://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#Scala
-  //Coordinates representing the bounding box are needed to ensure that nothing is drawn outside the bounding box
-//  def bresenham(bm:RgbBitmap, x0:Int, y0:Int, x1:Int, y1:Int, c:Color)={
-//    val dx= math.abs(x1-x0) //find the difference between the pixels on the x-axis
-//    val sx = if (x0<x1) 1 else -1
-//    val dy=math.abs(y1-y0)
-//    val sy=if (y0<y1) 1 else -1
-//
-//    def it=new Iterator[(Int, Int)]{
-//      var x = x0;
-//      var y = y0;
-//      var err=(if (dx>dy) dx else -dy)/2
-//      def next={
-//        val res=(x,y)
-//        val e2=err;
-//        if (e2 > -dx) {err-=dy; x+=sx}
-//        if (e2<dy) {err+=dx; y+=sy}
-//        res;
-//      }
-//      def hasNext = (sx*x <= sx*x1 && sy*y <= sy*y1)
-//    }
-//
-//    for((x,y) <- it)
-//      bm.setPixel(x, y, c)
-//  }
   //Midpoint circle algorithm taken from https://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#Scala
   def midpoint(bm:RgbBitmap, x0:Int, y0:Int, radius:Int, c:Color)={
     var f=1-radius
@@ -76,9 +51,6 @@ class RgbBitmap(val width:Int, val height:Int) {
     var y=radius
 
     try {
-
-
-
     bm.setPixel(x0, y0+radius, c)
     bm.setPixel(x0, y0-radius, c)
     bm.setPixel(x0+radius, y0, c)
@@ -111,16 +83,16 @@ class RgbBitmap(val width:Int, val height:Int) {
     }
   }
 
-  def DrawImg(figureList: List[Figure], bitmap: RgbBitmap): Unit = figureList match{
+  def DrawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitmap): Unit = figureList match{
     case List() => Unit
     case f::tl =>
       f match {
         case Line(x1,y1,x2,y2) => DrawLine(bitmap,Color.BLACK, x1,y1,x2,y2)
         case Rectangle(x1,y1,x2,y2) => {
-          DrawLine(bitmap, Color.BLACK, x1, y1, x1, y2)
-          DrawLine(bitmap, Color.BLACK, x1, y1, x2, y1)
-          DrawLine(bitmap, Color.BLACK, x1, y2, x2, y2)
-          DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
+          DrawLine(bitmap, Color.BLACK, math.min(x1, boundingBox.x1), math.min(y1, boundingBox.y1), math.min(x1, boundingBox.y1), math.min(y2, boundingBox.x2))
+          DrawLine(bitmap, Color.BLACK, math.min(x1, boundingBox.x1), math.min(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y1, boundingBox.y1))
+          DrawLine(bitmap, Color.BLACK, math.min(x1, boundingBox.x1), math.min(y2,boundingBox.y2), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
+          DrawLine(bitmap, Color.BLACK, math.min(x2, boundingBox.x2), math.min(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         }
         //case Circle(x, y, r)=> DrawCircle(bitmap, Color.BLACK, x, y, r)
         case Circle(x, y, r) => midpoint(bitmap, x, y, r, new Color(0,0,0))
@@ -132,7 +104,7 @@ class RgbBitmap(val width:Int, val height:Int) {
           DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
         case _ => return
       }
-      DrawImg(tl, bitmap)
+      DrawImg(tl, boundingBox, bitmap)
   }
 
   def Fill(c:String, g:Figure): Unit ={
@@ -157,4 +129,4 @@ class RgbBitmap(val width:Int, val height:Int) {
   bitMapping.fill(Color.WHITE)
 
   DrawImg(List(L, C, T, Nil()), bitMapping)
-  ImageIO.write(bitMapping.image, "jpg", new File(s"${System.getenv("HOMEPATH")}\\Desktop\\tester.jpg"))
+  ImageIO.write(bitMapping.image, "jpg", new File("/Users/simonthranehansen/Documents/tester.jpg"))

@@ -58,11 +58,11 @@ class ParserTester extends FunSuite with BeforeAndAfter{
 
   test("ParseListOfCommand"){
     val builder = StringBuilder.newBuilder
-    builder.append(LineCommand)
-    builder.append(System.getProperty("line.separator"))
-    builder.append(LineCommand)
-    builder.append(System.getProperty("line.separator"))
     builder.append(boundingBoxCommand)
+    builder.append(System.getProperty("line.separator"))
+    builder.append(LineCommand)
+    builder.append(System.getProperty("line.separator"))
+    builder.append(LineCommand)
     val tree = generateAbstractSyntaxTree(builder.toString())
     assert(tree.length == 3)
     assert(IsSyntaxTreeValid(tree))
