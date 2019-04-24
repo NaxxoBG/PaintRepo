@@ -94,15 +94,10 @@ def fillRectangle(bitmap: RgbBitmap, x1: Int, y1: Int, x2: Int, y2: Int, color: 
 }
 
 def drawRectangle(x1: Int, y1: Int, x2: Int, y2: Int, bitmap: RgbBitmap, fill:Boolean): Unit = {
-  print(x1, x2, y1, y2)
   DrawLine(bitmap, Color.BLACK, x1, y1, x1, y2)
-  print(1)
   DrawLine(bitmap, Color.BLACK, x1, y1, x2, y1)
-  print(2)
   DrawLine(bitmap, Color.BLACK, x1, y2, x2, y2)
-  print(3)
   DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
-  print(4)
   if(fill)
     fillRectangle(bitmap, x1, y1, x2, y2, Color.BLACK)
 
@@ -114,12 +109,12 @@ def DrawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitma
     f match {
       case Fill(c, fig) => fig match {
         case Rectangle(x1, y1, x2, y2) =>
-          drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.max(x2, boundingBox.x2), math.max(y2, boundingBox.y2), bitmap, true)
+          drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, true)
         case _ => return
       }
       case Line(x1, y1, x2, y2) => DrawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
       case Rectangle(x1, y1, x2, y2) => {
-        drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.max(x2, boundingBox.x2), math.max(y2, boundingBox.y2), bitmap, false)
+        drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, false)
       }
       //case Circle(x, y, r)=> DrawCircle(bitmap, Color.BLACK, x, y, r)
       case Circle(x, y, r) => midpoint(bitmap, x, y, r, new Color(0, 0, 0))
@@ -143,13 +138,10 @@ def testDraw(): BufferedImage = {
 }
 
 val bitMapping = new RgbBitmap(500, 500)
-val L = Line(20, 20, 400, 400)
-val C = Circle(200, 200, 100)
 val B = BoundingBox(0, 0, 500, 500)
-val T = TextAt(100, 100, "Hello Again World ")
 val R = Rectangle(350, 350, 400, 400)
 bitMapping.image.createGraphics()
 bitMapping.fill(Color.WHITE)
 
-DrawImg(List(L, C, R, T, Nil()), B, bitMapping)
+DrawImg(List(R, Nil()), B, bitMapping)
 ImageIO.write(bitMapping.image, "jpg", new File("/Users/simonthranehansen/Documents/tester.jpg"))
