@@ -70,16 +70,16 @@ object BresenhamLineAlgorithm {
       return resultList
     } //Done
     if (dx == 0 || dy == 0) {
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
+      return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
     } //is vertical or horizontal
 
     val derr = FindDErr(dx, dy)
     val ploterr = err + derr
 
     if (ploterr >= 0.5)
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, ploterr - 1.0, resultList)
+      return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, ploterr - 1.0, resultList)
     else
-      LineRc(x0 + Sign(dx), y0, x1, y1, ploterr, resultList)
+     return LineRc(x0 + Sign(dx), y0, x1, y1, ploterr, resultList)
   }
 
   def LineWrapper(x0: Int, y0: Int, x1: Int, y1: Int): PointList = {

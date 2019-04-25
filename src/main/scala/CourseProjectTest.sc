@@ -132,8 +132,9 @@ def testDraw(): BufferedImage = {
 val bitMapping = new RgbBitmap(500, 500)
 val B = BoundingBox(0, 0, 500, 500)
 val fillR = Fill("BLACK", Rectangle(398, 398, 400, 400))
+val R = Rectangle(2,2,256,256)
 bitMapping.image.createGraphics()
 bitMapping.fill(Color.WHITE)
 
-DrawImg(List(fillR,  Nil()), B, bitMapping)
+DrawImg(List(fillR, R,  Nil()), B, bitMapping)
 ImageIO.write(bitMapping.image, "jpg", new File("/Users/simonthranehansen/Documents/tester.jpg"))

@@ -4,6 +4,13 @@ import org.scalatest.FunSuite
 
 class BresenhamTest extends FunSuite{
 
+  def time[R](block: => R): R = {
+    val t0 = System.currentTimeMillis()
+    val result = block    // call-by-name
+    val t1 = System.currentTimeMillis()
+    println("Elapsed time: " + (t1 - t0) + "ns")
+    result
+  }
 
   def printPointList(list: PointList):Unit= list match {
     case PointListNil() => return
@@ -64,6 +71,17 @@ class BresenhamTest extends FunSuite{
     assert(pointList == expectedPointList)
   }
 
+  test("RectangleTimeTest1"){
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,200,200, false)}
+  }
+
+  test("RectangleTimeTest2"){
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,50,50, false)}
+  }
+
+  test("RectangleTimeTest3"){
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,10,10, false)}
+  }
 
   test("RectangleCubeSide2Filled"){
     val expectedPointList = PointListCons(Coord(2,2), PointListCons(Coord(2,1), PointListCons(Coord(2, 0), PointListCons(Coord(1,2), PointListCons(Coord(1,1),
