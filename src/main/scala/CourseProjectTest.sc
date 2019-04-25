@@ -42,6 +42,8 @@ def DrawCircle(bm: RgbBitmap, c: Color, x0: Int, y0: Int, radius: Int, boundingB
   pointDrawer(midpointWrapper(x0, y0, radius), bm, c)
 }
 
+
+
 //Midpoint circle algorithm taken from https://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#Scala
 def midpoint(bm: RgbBitmap, x0: Int, y0: Int, radius: Int, c: Color) = {
   var f = 1 - radius
@@ -81,25 +83,14 @@ def midpoint(bm: RgbBitmap, x0: Int, y0: Int, radius: Int, c: Color) = {
   }
 }
 
-def fillRectangle(bitmap: RgbBitmap, x1: Int, y1: Int, x2: Int, y2: Int, color: Color): Unit ={
-  var x = x1;
-  var y = y1;
-  while(x <= x2){
-    while (y <= y2){
-      bitmap.setPixel(x, y, Color.BLACK)
-      y += 1;
-    }
-    x += 1;
-  }
-}
+
 
 def drawRectangle(x1: Int, y1: Int, x2: Int, y2: Int, bitmap: RgbBitmap, fill:Boolean): Unit = {
-  DrawLine(bitmap, Color.BLACK, x1, y1, x1, y2)
-  DrawLine(bitmap, Color.BLACK, x1, y1, x2, y1)
-  DrawLine(bitmap, Color.BLACK, x1, y2, x2, y2)
-  DrawLine(bitmap, Color.BLACK, x2, y1, x2, y2)
-  if(fill)
-    fillRectangle(bitmap, x1, y1, x2, y2, Color.BLACK)
+  val points = getPointRectangle(x1, y1, x2, y2, fill)
+  pointDrawer(points, bitmap, Color.BLACK)
+}
+
+def FillCircle(): Unit ={
 
 }
 
@@ -108,6 +99,7 @@ def DrawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitma
   case f :: tl =>
     f match {
       case Fill(c, fig) => fig match {
+        case Circle(x, y, r) => FillCircle()
         case Rectangle(x1, y1, x2, y2) =>
           drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, true)
         case _ => return
@@ -139,9 +131,9 @@ def testDraw(): BufferedImage = {
 
 val bitMapping = new RgbBitmap(500, 500)
 val B = BoundingBox(0, 0, 500, 500)
-val R = Rectangle(350, 350, 400, 400)
+val fillR = Fill("BLACK", Rectangle(398, 398, 400, 400))
 bitMapping.image.createGraphics()
 bitMapping.fill(Color.WHITE)
 
-DrawImg(List(R, Nil()), B, bitMapping)
+DrawImg(List(fillR,  Nil()), B, bitMapping)
 ImageIO.write(bitMapping.image, "jpg", new File("/Users/simonthranehansen/Documents/tester.jpg"))

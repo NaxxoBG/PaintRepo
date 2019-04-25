@@ -55,4 +55,21 @@ class BresenhamTest extends FunSuite{
     printPointList(pointList)
     assert(expectedPointList == pointList)
   }
+
+  test("RectangleCubeSide2NotFilled"){
+    val expectedPointList = PointListCons(Coord(2,1), PointListCons(Coord(1,2), PointListCons(Coord(2, 2), PointListCons(Coord(1,0), PointListCons(Coord(2,0),
+      PointListCons(Coord(0, 0), PointListCons(Coord(0,1), PointListCons(Coord(0,2), PointListNil()))))))))
+    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, false)
+    printPointList(pointList)
+    assert(pointList == expectedPointList)
+  }
+
+
+  test("RectangleCubeSide2Filled"){
+    val expectedPointList = PointListCons(Coord(2,2), PointListCons(Coord(2,1), PointListCons(Coord(2, 0), PointListCons(Coord(1,2), PointListCons(Coord(1,1),
+      PointListCons(Coord(1, 0), PointListCons(Coord(0,2), PointListCons(Coord(0,1), PointListCons(Coord(0,0), PointListNil())))))))))
+    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, true)
+    printPointList(pointList)
+    assert(pointList == expectedPointList)
+  }
 }

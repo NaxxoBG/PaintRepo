@@ -33,6 +33,34 @@ object BresenhamLineAlgorithm {
     case PointListCons(hd, tl) => PointListCons(hd, concat(tl, list2))
   }
 
+  def fillRectangle(x1: Int, y1: Int, x2: Int, y2: Int): PointList ={
+    var x = x1;
+    var y = y1;
+    var pointList = PointListCons(Coord(x, y), PointListNil())
+    while(x <= x2){
+      y = y1;
+      while (y <= y2){
+        if(x != x1 || y != y1){
+          pointList = PointListCons(Coord(x, y), pointList);
+        }
+        y += 1;
+      }
+      x += 1;
+    }
+    return pointList;
+  }
+
+  def getPointRectangle(x1: Int, y1: Int, x2: Int, y2: Int, fill:Boolean): PointList = {
+    if(fill){
+      fillRectangle(x1, y1, x2, y2)
+    }else {
+      var points = LineWrapper(x1, y1, x1, y2)
+      points = concat(LineWrapper((x1 + 1), y1, x2, y1), points) //This will avoid dublicate pixels of the corners
+      points = concat(LineWrapper((x1 + 1), y2, x2, y2), points)
+      concat(LineWrapper(x2, (y1 + 1), x2, (y2 - 1)), points)
+    }
+  }
+
   def LineRc(x0: Int, y0: Int, x1: Int, y1: Int, err: Double, list: PointList): PointList = //list match
   {
     val dx = DeltaCalc(x0, x1)
