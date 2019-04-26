@@ -1,4 +1,4 @@
-import BresenhamLineAlgorithm.{Coord, PointList, PointListCons, PointListNil}
+import BresenhamLineAlgorithm.{Coord, printPointList, PointListCons, PointListNil}
 import org.scalatest.FunSuite
 
 
@@ -12,10 +12,7 @@ class BresenhamTest extends FunSuite{
     result
   }
 
-  def printPointList(list: PointList):Unit= list match {
-    case PointListNil() => return
-    case PointListCons(Coord(x,y), tl) => (printf("Point x:%d, y:%d \n", x, y), printPointList(tl))
-  }
+
 
   test("MidpointTestRadius1"){
     val expectedPointList = PointListCons(Coord(1,0), PointListCons(Coord(0,1), PointListCons(Coord(-1,0), PointListCons(Coord(0,-1), PointListNil()))))
@@ -24,7 +21,7 @@ class BresenhamTest extends FunSuite{
   }
 
   test("MidpointTestRadius3"){
-    val pointList = BresenhamLineAlgorithm.midpointWrapper(0,0, 3)
+    val pointList = BresenhamLineAlgorithm.midpointWrapper(110,110, 50)
     printPointList(pointList)
   }
 

@@ -51,38 +51,7 @@ object BresenhamLineAlgorithm {
 
   }
 
-  def midpoint(x0: Int, y0: Int, radius: Int, xRest: Int, list: IntList): IntList = {
-    var x = xRest
-    var y = radius
-    var tlist = list
-    if (x < y) {
-      var f = 1 - radius
-      var ddF_x = 1
-      var ddF_y = -2 * radius
-      tlist = concat(tlist, Coord(x0, y0 + radius))
-      tlist = concat(tlist, Coord(x0, y0 - radius))
-      tlist = concat(tlist, Coord(x0 + radius, y0))
-      tlist = concat(tlist, Coord(x0 - radius, y0))
-      if (f >= 0) {
-        y -= 1
-        ddF_y += 2
-        f += ddF_y
-      }
-      x += 1
-      ddF_x += 2
-      f += ddF_x
-      tlist = concat(tlist, Coord(x0 + x, y0 + y))
-      tlist = concat(tlist, Coord(x0 - x, y0 + y))
-      tlist = concat(tlist, Coord(x0 + x, y0 - y))
-      tlist = concat(tlist, Coord(x0 - x, y0 - y))
-      tlist = concat(tlist, Coord(x0 + y, y0 + x))
-      tlist = concat(tlist, Coord(x0 - y, y0 + x))
-      tlist = concat(tlist, Coord(x0 + y, y0 - x))
-      tlist = concat(tlist, Coord(x0 - y, y0 - x))
-      midpoint(x0, y0, radius, x, tlist)
-    }
-    tlist
-  }
+
 
   /*def DrawLine(list: IntList,x0:Int,y0:Int,x1:Int,y1:Int)={
     LineRc(list,x0,y0,x1,y1,0.0,y0)
