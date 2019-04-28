@@ -1,31 +1,28 @@
+package engine
+
 import scala.annotation.tailrec
 
 object BresenhamLineAlgorithm {
 
-  sealed abstract class Point;
-
+  sealed abstract class Point
   case class Coord(x: Int, y: Int) extends Point
 
-  sealed abstract class PointList;
-
-  case class PointListNil() extends PointList;
-
-  case class PointListCons(crd: Coord, tl: PointList) extends PointList;
+  sealed abstract class PointList
+  case class PointListNil() extends PointList
+  case class PointListCons(crd: Coord, tl: PointList) extends PointList
 
   def printPointList(list: PointList):Unit= list match {
-    case PointListNil() => return
+    case PointListNil() =>
     case PointListCons(Coord(x,y), tl) => (printf("Point x:%d, y:%d \n", x, y), printPointList(tl))
   }
 
-
   def DeltaCalc(val1: Int, val2: Int): Int = {
-    val dval = val2 - val1
-    dval
+    val2 - val1
   }
 
   def FindDErr(dx: Int, dy: Int): Double = {
     if (dx != 0)
-      math.abs(((dy).toDouble / dx.toDouble))
+      math.abs(dy.toDouble / dx.toDouble)
     else
       dy
   }
@@ -49,20 +46,20 @@ object BresenhamLineAlgorithm {
     @tailrec
     def fillRectangleTailRec(x1: Int, y1: Int, x2: Int, y2: Int, pointList: PointList): PointList = {
       if (x1 > x2) return pointList
-      return fillRectangleTailRec(x1 + 1, y1, x2, y2, concat(LineWrapper(x1, y1, x1, y2), pointList))
+      fillRectangleTailRec(x1 + 1, y1, x2, y2, concat(LineWrapper(x1, y1, x1, y2), pointList))
     }
 
-    return fillRectangleTailRec(x1, y1, x2, y2, PointListNil())
+    fillRectangleTailRec(x1, y1, x2, y2, PointListNil())
   }
 
   def getPointRectangle(x1: Int, y1: Int, x2: Int, y2: Int, fill: Boolean): PointList = {
     if (fill) {
-      return fillRectangle(x1, y1, x2, y2)
+      fillRectangle(x1, y1, x2, y2)
     } else {
       var points = LineWrapper(x1, y1, x1, y2)
-      points = concat(LineWrapper((x1 + 1), y1, x2, y1), points) //This will avoid dublicate pixels of the corners
-      points = concat(LineWrapper((x1 + 1), y2, x2, y2), points)
-      return concat(LineWrapper(x2, (y1 + 1), x2, (y2 - 1)), points)
+      points = concat(LineWrapper(x1 + 1, y1, x2, y1), points) //This will avoid duplicate pixels of the corners
+      points = concat(LineWrapper(x1 + 1, y2, x2, y2), points)
+      concat(LineWrapper(x2, y1 + 1, x2, y2 - 1), points)
     }
   }
 
@@ -78,13 +75,13 @@ object BresenhamLineAlgorithm {
       return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
     } //is vertical or horizontal
 
-    val derr = FindDErr(dx, dy)
-    val ploterr = err + derr
+    val der = FindDErr(dx, dy)
+    val plotErr = err + der
 
-    if (ploterr >= 0.5)
-      return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, ploterr - 1.0, resultList)
+    if (plotErr >= 0.5)
+      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
     else
-      return LineRc(x0 + Sign(dx), y0, x1, y1, ploterr, resultList)
+      LineRc(x0 + Sign(dx), y0, x1, y1, plotErr, resultList)
   }
 
   def LineWrapper(x0: Int, y0: Int, x1: Int, y1: Int): PointList = {
@@ -100,7 +97,7 @@ object BresenhamLineAlgorithm {
     resultList = PointListCons(Coord(x0 - y, y0 + x), resultList)
     resultList = PointListCons(Coord(x0 + y, y0 - x), resultList)
     resultList = PointListCons(Coord(x0 - y, y0 - x), resultList)
-    return resultList
+    resultList
   }
 
   def GetTheFourCornersOfCircle(x0: Int, y0: Int, radius: Int): PointList = {
@@ -108,7 +105,7 @@ object BresenhamLineAlgorithm {
     resultList = PointListCons(Coord(x0, y0 - radius), resultList)
     resultList = PointListCons(Coord(x0 + radius, y0), resultList)
     resultList = PointListCons(Coord(x0 - radius, y0), resultList)
-    return resultList;
+    resultList
   }
 
   def midpointWrapper(x0: Int, y0: Int, radius: Int): PointList = {
@@ -127,15 +124,14 @@ object BresenhamLineAlgorithm {
         val x_change = x_inner + 1
         val ddFX_change = ddFX + 2
         f_change += ddFX_change
-        return midPoint(f_change, x0, y0, x_change, y_change, ddFX_change, ddFY_change, CircleCoordinatesEvery45deg(x0, y0, x_change, y_change, pointList))
+        midPoint(f_change, x0, y0, x_change, y_change, ddFX_change, ddFY_change, CircleCoordinatesEvery45deg(x0, y0, x_change, y_change, pointList))
       }
       else {
-        return pointList
+        pointList
       }
     }
 
-
-    return midPoint(1 - radius, x0, y0, 0, radius, 1, -2*radius, GetTheFourCornersOfCircle(x0, y0, radius))
+    midPoint(1 - radius, x0, y0, 0, radius, 1, -2*radius, GetTheFourCornersOfCircle(x0, y0, radius))
   }
 
 }

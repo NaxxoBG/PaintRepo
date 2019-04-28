@@ -1,3 +1,6 @@
+
+// THIS FILE IS NOT USED ANYWHERE
+
 object BresenhamLineAlgorithm {
 
   sealed abstract class IntList
@@ -9,8 +12,7 @@ object BresenhamLineAlgorithm {
   case class Cons(crd: Coord, tl: IntList) extends IntList
 
   def DeltaCalc(val1: Int, val2: Int): Int = {
-    val dval = val2 - val1
-    dval
+    val2 - val1
   }
 
   def FindDErr(dx: Int, dy: Int): Double = {
@@ -35,19 +37,19 @@ object BresenhamLineAlgorithm {
   {
     val dx = DeltaCalc(x0, x1)
     val dy = DeltaCalc(y0, y1)
-    val tlist = concat(list, Coord(x0, y0))
-    if (dx == 0 && dy == 0) return tlist //Done
+    val tList = concat(list, Coord(x0, y0))
+    if (dx == 0 && dy == 0) return tList //Done
     if (dx == 0 || dy == 0) {
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, tlist)
+      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, tList)
     } //is vertical or horizontal
 
-    val derr = FindDErr(dx, dy)
-    val ploterr = err + derr
+    val dErr = FindDErr(dx, dy)
+    val plotErr = err + dErr
 
-    if (ploterr >= 0.5)
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, ploterr - 1.0, tlist)
+    if (plotErr >= 0.5)
+      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, tList)
     else
-      LineRc(x0 + Sign(dx), y0, x1, y1, ploterr, tlist)
+      LineRc(x0 + Sign(dx), y0, x1, y1, plotErr, tList)
 
   }
 

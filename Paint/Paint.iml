@@ -11,5 +11,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="PaintRepo" exported="" />
   </component>
 </module>

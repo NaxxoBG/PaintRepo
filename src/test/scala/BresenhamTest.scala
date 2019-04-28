@@ -1,5 +1,7 @@
-import BresenhamLineAlgorithm.{Coord, printPointList, PointListCons, PointListNil}
+
 import org.scalatest.FunSuite
+import engine.BresenhamLineAlgorithm._
+import engine._
 
 
 class BresenhamTest extends FunSuite{
@@ -63,28 +65,28 @@ class BresenhamTest extends FunSuite{
   test("RectangleCubeSide2NotFilled"){
     val expectedPointList = PointListCons(Coord(2,1), PointListCons(Coord(1,2), PointListCons(Coord(2, 2), PointListCons(Coord(1,0), PointListCons(Coord(2,0),
       PointListCons(Coord(0, 0), PointListCons(Coord(0,1), PointListCons(Coord(0,2), PointListNil()))))))))
-    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, false)
+    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, fill = false)
     printPointList(pointList)
     assert(pointList == expectedPointList)
   }
 
   test("RectangleTimeTest1"){
-    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,200,200, false)}
-    val pointList2 = time{BresenhamLineAlgorithm.getPointRectangle(0,0,200,200, true)}
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,200,200, fill = false)}
+    val pointList2 = time{BresenhamLineAlgorithm.getPointRectangle(0,0,200,200, fill = true)}
   }
 
   test("RectangleTimeTest2"){
-    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,50,50, false)}
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,50,50, fill = false)}
   }
 
   test("RectangleTimeTest3"){
-    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,10,10, false)}
+    val pointList = time{BresenhamLineAlgorithm.getPointRectangle(0,0,10,10, fill = false)}
   }
 
   test("RectangleCubeSide2Filled"){
     val expectedPointList = PointListCons(Coord(2,0), PointListCons(Coord(2,1), PointListCons(Coord(2, 2), PointListCons(Coord(1,0), PointListCons(Coord(1,1),
       PointListCons(Coord(1, 2), PointListCons(Coord(0,0), PointListCons(Coord(0,1), PointListCons(Coord(0,2), PointListNil())))))))))
-    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, true)
+    val pointList = BresenhamLineAlgorithm.getPointRectangle(0,0,2,2, fill = true)
     printPointList(pointList)
     assert(pointList == expectedPointList)
   }
