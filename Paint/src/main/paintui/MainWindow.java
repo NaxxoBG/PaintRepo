@@ -1,7 +1,13 @@
 package paintui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class MainWindow
@@ -33,6 +39,7 @@ public class MainWindow
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	private void initialize() {
 		frame = new JFrame();
@@ -91,9 +98,45 @@ public class MainWindow
 		txtPaneError.setEditable(false);
 		txtPaneError.setBackground(SystemColor.menu);
 		frame.getContentPane().add(txtPaneError);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(SystemColor.menu);
+		frame.setJMenuBar(menuBar);
+		
+		JMenu mnMenu = new JMenu("File");
+		mnMenu.setBackground(SystemColor.menu);
+		mnMenu.setHorizontalAlignment(SwingConstants.CENTER);
+		mnMenu.setMnemonic(KeyEvent.VK_F);
+		menuBar.add(mnMenu);
+		
+		JMenuItem menuItemSave = new JMenuItem("Save");
+		menuItemSave.addActionListener(e -> {
+			JFileChooser saveDialog = new JFileChooser();
+			saveDialog.setDialogTitle("Specify a file to save");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+			saveDialog.setFileFilter(filter);
+			if (saveDialog.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+				File file = saveDialog.getSelectedFile();
+				if (!saveDialog.getSelectedFile().getAbsolutePath().endsWith(".png")) {
+					file = new File(saveDialog.getSelectedFile() + ".png");
+				}
+				try {
+					BufferedImage bi = new BufferedImage(panelCanvas.getWidth(), panelCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					panelCanvas.paint(bi.getGraphics());
+					ImageIO.write(bi, "png", new File(file.getAbsolutePath()));
+				} catch (IOException ex) {
+					System.out.println("Failed to save image!");
+				}
+				System.out.println("File saved at path: " + file.getAbsolutePath());
+			}
+		});
+		menuItemSave.setBackground(UIManager.getColor("CheckBox.light"));
+		menuItemSave.setIcon(new ImageIcon(MainWindow.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
+		menuItemSave.setSelectedIcon(null);
+		mnMenu.add(menuItemSave);
 	}
 
 	public void reportErrors(String errors) {
-		this.txtPaneError.setText(errors);
+		SwingUtilities.invokeLater(() -> this.txtPaneError.setText(errors));
 	}
 }
