@@ -1,11 +1,11 @@
-package engine
+package au
 
-import scala.util.matching.Regex
 import java.util.Objects
 import java.util.function.Predicate
 
-package object engineValues {
+import scala.util.matching.Regex
 
+package object controller {
   sealed abstract class Figure
   case class Line(x1: Int, y1: Int, x2: Int, y2: Int) extends Figure
   case class Circle(x: Int, y: Int, r: Int) extends Figure

@@ -1,10 +1,10 @@
-package engine
+package au.controller
 
-import view.DrView
+import au.view.DrView
 
 class DrController(mainWindow: DrView) {
 
   def exec(): Unit = {
-    mainWindow.exec()
+    mainWindow.launch()
   }
 }

@@ -1,4 +1,4 @@
-package model
+package au.model
 
 import java.awt.{Color, Font}
 import java.awt.image.BufferedImage

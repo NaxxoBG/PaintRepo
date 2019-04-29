@@ -1,4 +1,4 @@
-package view;
+package au.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +18,7 @@ public class DrView
 	/**
 	 * Launch the application.
 	 */
-	public void exec() {
+	public void launch() {
 		EventQueue.invokeLater(() -> {
 			try {
 				DrView window = new DrView();

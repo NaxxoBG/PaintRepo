@@ -1,7 +1,8 @@
-package exec
+package au.exec
 
-import engine.DrController
-import view.DrView
+import au.controller.DrController
+import au.view.DrView
+
 
 object MainGraphr {
   def main(args: Array[String]): Unit = {

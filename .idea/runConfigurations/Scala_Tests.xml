@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Scala Tests in 'src'" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
+  <configuration default="false" name="Scala Tests" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
     <module name="PaintRepo" />
     <setting name="path" value="" />
     <setting name="vmparams" value="" />
@@ -13,8 +13,6 @@
     <envs />
     <setting name="testKind" value="All in package" />
     <setting name="package" value="" />
-    <buffered bufClass="BresenhamTest" />
-    <buffered bufClass="ParserTester" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

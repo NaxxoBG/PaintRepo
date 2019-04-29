@@ -1,7 +1,8 @@
 
+import au.controller.BresenhamLineAlgorithm._
+import au.controller.BresenhamLineAlgorithm
 import org.scalatest.FunSuite
-import engine.BresenhamLineAlgorithm._
-import engine._
+
 
 
 class BresenhamTest extends FunSuite{

@@ -1,12 +1,11 @@
-package engine
+package au.controller
 
 import java.awt.image.BufferedImage
-import java.awt.{Color, Font}
+import java.awt.Color
 
-import engine.BresenhamLineAlgorithm._
-import engine.Parser._
-import engine.engineValues._
-import model.RgbBitmap
+import au.controller.BresenhamLineAlgorithm._
+import au.controller.Parser._
+import au.model.RgbBitmap
 
 import scala.annotation.tailrec
 
@@ -64,8 +63,8 @@ object DrawingEngine {
     * @param commands String
     * @return BufferedImage
     */
-  def drawSyntaxTree(commands: String, width: Int, heigth: Int): BufferedImage = {
-    val bitMapping = new RgbBitmap(width, heigth)
+  def drawSyntaxTree(commands: String, width: Int, height: Int): BufferedImage = {
+    val bitMapping = new RgbBitmap(width, height)
     bitMapping.image.createGraphics()
     bitMapping.fill(Color.WHITE)
     val syntaxTree = generateAbstractSyntaxTree(commands)
