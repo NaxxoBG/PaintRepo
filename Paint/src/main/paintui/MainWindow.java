@@ -62,7 +62,7 @@ public class MainWindow
 
 		frame.getContentPane().add(scriptEditor);
 
-		PanelCanvas panelCanvas = new PanelCanvas();
+		PanelCanvas panelCanvas = new PanelCanvas(this);
 		springLayout.putConstraint(SpringLayout.WEST, scriptEditor, 13, SpringLayout.EAST, panelCanvas);
 		springLayout.putConstraint(SpringLayout.EAST, panelCanvas, 729, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, panelCanvas, 10, SpringLayout.NORTH, frame.getContentPane());

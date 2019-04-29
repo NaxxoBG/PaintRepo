@@ -1,6 +1,6 @@
 package paintui;
 
-import engine.DrawingEngine$;
+import engine.DrawingEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,11 @@ import java.util.Objects;
 public class PanelCanvas extends JPanel {
 
     private String commands;
+    private MainWindow parent;
 
-    PanelCanvas() {
+    PanelCanvas(MainWindow container) {
         this.commands = null;
+        this.parent = container;
     }
 
     void setCommands(String commands) {
@@ -24,11 +26,14 @@ public class PanelCanvas extends JPanel {
         super.paintComponent(g);
         if (!Objects.isNull(this.commands) && !this.commands.isEmpty()) {
             System.out.println("Editor pane text: " + this.commands);
-            BufferedImage img = DrawingEngine$.MODULE$.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
-            g.translate(0, this.getHeight());
-            ((Graphics2D) g).scale(1, -1);
-            g.drawImage(img, 0, 0, this);
-
+            try {
+                BufferedImage img = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
+                g.translate(0, this.getHeight());
+                ((Graphics2D) g).scale(1, -1);
+                g.drawImage(img, 0, 0, this);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                this.parent.reportErrors(e.getMessage());
+            }
         }
     }
 }
