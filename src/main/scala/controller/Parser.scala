@@ -1,7 +1,5 @@
 package au.controller
 
-import au._
-
 object Parser {
 
   def parseFromString(command: String): Figure = command match {

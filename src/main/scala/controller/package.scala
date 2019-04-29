@@ -17,6 +17,23 @@ package object controller {
   case class Nil() extends Figure
   case class Error(cmd: String) extends Figure
 
+  sealed abstract class Point
+  case class Coord(x: Int, y: Int) extends Point
+
+  sealed abstract class PointList
+  case class PointListNil() extends PointList
+  case class PointListCons(crd: Coord, tl: PointList) extends PointList
+
+  def printPointList(list: PointList):Unit= list match {
+    case PointListNil() =>
+    case PointListCons(Coord(x,y), tl) => (printf("Point x:%d, y:%d \n", x, y), printPointList(tl))
+  }
+
+  def concat(list1: PointList, list2: PointList): PointList = list1 match {
+    case PointListNil() => list2
+    case PointListCons(hd, tl) => PointListCons(hd, concat(tl, list2))
+  }
+
   val LineRegex: Regex = "\\((?i)Line\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
   val CircleRegex: Regex = "\\((?i)Circle\\((\\d+) (\\d+)\\) (\\d+)\\)".r
   val RectangleRegex: Regex = "\\((?i)Rectangle\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
