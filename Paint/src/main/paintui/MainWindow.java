@@ -46,7 +46,7 @@ public class MainWindow
 		frame.setBounds(100, 100, 1100, 600);
 		frame.setTitle("GraphR");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(1000, 550));
+		frame.setMinimumSize(new Dimension(1000, 600));
 
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);

@@ -85,8 +85,8 @@ object DrawingEngine {
     * @param commands String
     * @return BufferedImage
     */
-  def drawSyntaxTree(commands: String): BufferedImage = {
-    val bitMapping = new RgbBitmap(500, 500)
+  def drawSyntaxTree(commands: String, width: Int, heigth: Int): BufferedImage = {
+    val bitMapping = new RgbBitmap(width, heigth)
     bitMapping.image.createGraphics()
     bitMapping.fill(Color.WHITE)
     val syntaxTree = generateAbstractSyntaxTree(commands)

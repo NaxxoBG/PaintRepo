@@ -24,7 +24,9 @@ public class PanelCanvas extends JPanel {
         super.paintComponent(g);
         if (!Objects.isNull(this.commands) && !this.commands.isEmpty()) {
             System.out.println("Editor pane text: " + this.commands);
-            BufferedImage img = DrawingEngine$.MODULE$.drawSyntaxTree(this.commands);
+            BufferedImage img = DrawingEngine$.MODULE$.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
+            g.translate(0, this.getHeight());
+            ((Graphics2D) g).scale(1, -1);
             g.drawImage(img, 0, 0, this);
 
         }
