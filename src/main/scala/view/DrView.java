@@ -1,4 +1,4 @@
-package paintui;
+package view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,15 +10,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class MainWindow
+public class DrView
 {
 	private JFrame frame;
 	private JTextPane txtPaneError;
 
 	/**
+	 * Launch the application.
+	 */
+	public void exec() {
+		EventQueue.invokeLater(() -> {
+			try {
+				DrView window = new DrView();
+				window.frame.setVisible(true);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	/**
 	 * Create the application.
 	 */
-	private MainWindow() {
+	public DrView() {
 		initialize();
 	}
 
@@ -116,7 +131,7 @@ public class MainWindow
 			}
 		});
 		menuItemSave.setBackground(UIManager.getColor("CheckBox.light"));
-		menuItemSave.setIcon(new ImageIcon(MainWindow.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
+		menuItemSave.setIcon(new ImageIcon(DrView.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
 		menuItemSave.setSelectedIcon(null);
 		mnMenu.add(menuItemSave);
 	}
