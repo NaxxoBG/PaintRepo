@@ -31,8 +31,8 @@ public class PanelCanvas extends JPanel {
                 g.translate(0, this.getHeight());
                 ((Graphics2D) g).scale(1, -1);
                 g.drawImage(img, 0, 0, this);
-            } catch (Exception e) {
-                SwingUtilities.invokeLater(() -> this.parent.reportErrors(e.getMessage()));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                this.parent.reportErrors(e.getMessage());
             }
 
         }
