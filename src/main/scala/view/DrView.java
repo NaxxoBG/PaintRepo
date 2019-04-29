@@ -62,7 +62,7 @@ public class DrView
 
 		frame.getContentPane().add(scriptEditor);
 
-		PanelCanvas panelCanvas = new PanelCanvas();
+		PanelCanvas panelCanvas = new PanelCanvas(this);
 		springLayout.putConstraint(SpringLayout.WEST, scriptEditor, 13, SpringLayout.EAST, panelCanvas);
 		springLayout.putConstraint(SpringLayout.EAST, panelCanvas, 729, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, panelCanvas, 10, SpringLayout.NORTH, frame.getContentPane());
@@ -77,6 +77,7 @@ public class DrView
 				SwingUtilities.invokeLater(() -> {
 					String editorText = scriptEditor.getText();
 					if (!Objects.isNull(editorText) && !editorText.isEmpty()) {
+						txtPaneError.setText("");
 						panelCanvas.setCommands(editorText);
 						panelCanvas.repaint();
 					}
@@ -137,6 +138,10 @@ public class DrView
 	}
 
 	public void reportErrors(String errors) {
-		SwingUtilities.invokeLater(() -> this.txtPaneError.setText(errors));
+		SwingUtilities.invokeLater(() -> {
+			if(!Objects.isNull(txtPaneError)) {
+				txtPaneError.setText(errors);
+			}
+		});
 	}
 }

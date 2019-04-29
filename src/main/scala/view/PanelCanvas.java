@@ -10,9 +10,11 @@ import java.util.Objects;
 public class PanelCanvas extends JPanel {
 
     private String commands;
+    private DrView parent;
 
-    PanelCanvas() {
+    PanelCanvas(DrView parent) {
         this.commands = null;
+        this.parent = parent;
     }
 
     void setCommands(String commands) {
@@ -24,10 +26,15 @@ public class PanelCanvas extends JPanel {
         super.paintComponent(g);
         if (!Objects.isNull(this.commands) && !this.commands.isEmpty()) {
             System.out.println("Editor pane text: " + this.commands);
-            BufferedImage img = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
-            g.translate(0, this.getHeight());
-            ((Graphics2D) g).scale(1, -1);
-            g.drawImage(img, 0, 0, this);
+            try {
+                BufferedImage img = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
+                g.translate(0, this.getHeight());
+                ((Graphics2D) g).scale(1, -1);
+                g.drawImage(img, 0, 0, this);
+            } catch (Exception e) {
+                SwingUtilities.invokeLater(() -> this.parent.reportErrors(e.getMessage()));
+            }
+
         }
     }
 }

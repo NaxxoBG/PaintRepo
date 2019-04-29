@@ -1,3 +1,4 @@
+package te
 
 import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
