@@ -42,9 +42,10 @@ object DrawingEngine {
     pointDrawer(LineWrapper(x0, y0, x1, y1), bm, c)
   }
 
-  def drawCircle(bm: RgbBitmap, c: Color, x0: Int, y0: Int, radius: Int): Unit = {
-    printf("x0:%d, y0:%d, r:%d \n", x0, y0, radius)
-    val points = BresenhamLineAlgorithm.midpointWrapper(x0, y0, radius)
+  def drawCircle(bm: RgbBitmap, c: Color, x0: Int, y0: Int, radius: Int, fill: Boolean): Unit = {
+    var points = BresenhamLineAlgorithm.midpointWrapper(x0, y0, radius)
+    if(fill)
+      points = BresenhamLineAlgorithm.fillCircle(y0, x0, radius + y0, radius, points);
     pointDrawer(points, bm, c)
   }
 
@@ -53,9 +54,7 @@ object DrawingEngine {
     pointDrawer(points, bitmap, Color.BLACK)
   }
 
-  def fillCircle(): Unit = {
 
-  }
 
   @tailrec
   def drawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitmap): Unit = figureList match {
@@ -63,7 +62,7 @@ object DrawingEngine {
     case f :: tl =>
       f match {
         case Fill(_, fig) => fig match {
-          case Circle(_, _, _) => fillCircle()
+          case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, true)
           case Rectangle(x1, y1, x2, y2) =>
             drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = true)
           case _ => return
@@ -71,7 +70,7 @@ object DrawingEngine {
         case Line(x1, y1, x2, y2) => drawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         case Rectangle(x1, y1, x2, y2) =>
           drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = false)
-        case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r)
+        case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, false)
         case TextAt(x, y, s) => bitmap.writeText(s, x, y)
         case BoundingBox(x1, y1, x2, y2) => drawRectangle(x1, y1, x2, y2, bitmap, fill = false)
         case _ => return

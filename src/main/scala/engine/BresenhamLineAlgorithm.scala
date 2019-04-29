@@ -3,7 +3,6 @@ package engine
 import scala.annotation.tailrec
 
 object BresenhamLineAlgorithm {
-
   sealed abstract class Point
   case class Coord(x: Int, y: Int) extends Point
 
@@ -106,6 +105,19 @@ object BresenhamLineAlgorithm {
     resultList = PointListCons(Coord(x0 + radius, y0), resultList)
     resultList = PointListCons(Coord(x0 - radius, y0), resultList)
     resultList
+  }
+
+  def findLeftPointOfCircleAtY(points: PointList, y0: Int): Int = points match {
+    case PointListNil() => return 0
+    case PointListCons(Coord(x,y), tl) => if(y == y0) return x else return findLeftPointOfCircleAtY(tl, y0)
+  }
+
+  @tailrec
+  def fillCircle(y0: Int, x0: Int, y: Int, radius: Int, points: PointList): PointList = {
+    if(y == y0 - radius) return points;
+    val x_left = findLeftPointOfCircleAtY(points, y)
+    val x_right = x0 - x_left + x0
+    fillCircle(y0, x0, y - 1, radius, concat(LineWrapper(x_left, y, x_right, y), points))
   }
 
   def midpointWrapper(x0: Int, y0: Int, radius: Int): PointList = {
