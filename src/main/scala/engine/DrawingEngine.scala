@@ -42,10 +42,31 @@ object DrawingEngine {
     pointDrawer(LineWrapper(x0, y0, x1, y1), bm, c)
   }
 
-  def drawCircle(bm: RgbBitmap, c: Color, x0: Int, y0: Int, radius: Int, fill: Boolean): Unit = {
+  def outsideBoundBox(x: Int, y: Int, boundingBox: BoundingBox): Boolean = {
+    return (x < boundingBox.x1 || x > boundingBox.y2 || y < boundingBox.y1 || y > boundingBox.y2)
+  }
+
+  def removePointsOutsideBoundingBox(points: PointList, boundingBox: BoundingBox): PointList = {
+    val resultPointList = PointListNil()
+
+    @tailrec
+    def removePoints(points: PointList, boundingBox: BoundingBox, resultPoints: PointList): PointList = points match {
+      case PointListNil() => return resultPointList;
+      case PointListCons(Coord(x, y), tl) => {
+        if (outsideBoundBox(x, y, boundingBox))
+          return removePoints(tl, boundingBox, resultPoints)
+        else return removePoints(tl, boundingBox, PointListCons(Coord(x, y), resultPoints))
+      }
+    }
+
+    return removePoints(points, boundingBox, resultPointList)
+  }
+
+  def drawCircle(bm: RgbBitmap, c: Color, x0: Int, y0: Int, radius: Int, boundingBox: BoundingBox, fill: Boolean): Unit = {
     var points = BresenhamLineAlgorithm.midpointWrapper(x0, y0, radius)
-    if(fill)
+    if (fill)
       points = BresenhamLineAlgorithm.fillCircle(y0, x0, radius + y0, radius, points);
+    points = removePointsOutsideBoundingBox(points, boundingBox)
     pointDrawer(points, bm, c)
   }
 
@@ -55,14 +76,13 @@ object DrawingEngine {
   }
 
 
-
   @tailrec
   def drawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitmap): Unit = figureList match {
     case List() => Unit
     case f :: tl =>
       f match {
         case Fill(_, fig) => fig match {
-          case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, true)
+          case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, boundingBox, true)
           case Rectangle(x1, y1, x2, y2) =>
             drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = true)
           case _ => return
@@ -70,7 +90,7 @@ object DrawingEngine {
         case Line(x1, y1, x2, y2) => drawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         case Rectangle(x1, y1, x2, y2) =>
           drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = false)
-        case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, false)
+        case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, boundingBox, false)
         case TextAt(x, y, s) => bitmap.writeText(s, x, y)
         case BoundingBox(x1, y1, x2, y2) => drawRectangle(x1, y1, x2, y2, bitmap, fill = false)
         case _ => return
@@ -81,6 +101,7 @@ object DrawingEngine {
   /**
     * The method assumes the first element of the syntax tree is a BoundingBox. It draws all figures instantly, based on the passed <br >
     * command, and returns the BufferedImage.
+    *
     * @param commands String
     * @return BufferedImage
     */
