@@ -102,9 +102,8 @@ object BresenhamLineAlgorithm {
   @tailrec
   def fillCircle(y0: Int, x0: Int, y: Int, radius: Int, points: PointList): PointList = {
     if(y == y0 - radius) return points
-    val x_left = findLeftPointOfCircleAtY(points, y)
-    val x_right = math.abs(x0 - x_left) + x0
-    fillCircle(y0, x0, y - 1, radius, concat(LineWrapper(x_left, y, x_right, y), points))
+    val d = math.abs(x0 - findLeftPointOfCircleAtY(points, y))
+    fillCircle(y0, x0, y - 1, radius, concat(LineWrapper(x0 - d, y, x0 + d, y), points))
   }
 
   def midpointWrapper(x0: Int, y0: Int, radius: Int): PointList = {

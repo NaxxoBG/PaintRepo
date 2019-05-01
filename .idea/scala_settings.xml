@@ -5,6 +5,7 @@
   </component>
   <component name="WorksheetDefaultProjectSettings">
     <option name="compilerProfileName" value="Default" />
+    <option name="makeBeforeRun" value="true" />
     <option name="moduleName" value="PaintRepo" />
   </component>
 </project>

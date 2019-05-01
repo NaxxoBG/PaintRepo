@@ -1,7 +1,7 @@
 package au.controller
 
-import java.awt.image.BufferedImage
 import java.awt.Color
+import java.awt.image.BufferedImage
 
 import au.controller.BresenhamLineAlgorithm._
 import au.controller.Parser._
@@ -28,13 +28,13 @@ object DrawingEngine {
     pointDrawer(points, bm, c)
   }
 
-  def drawRectangle(x1: Int, y1: Int, x2: Int, y2: Int, bitmap: RgbBitmap, fill: Boolean): Unit = {
+  def drawRectangle(x1: Int, y1: Int, x2: Int, y2: Int, bitmap: RgbBitmap, c: Color, fill: Boolean): Unit = {
     val points = getPointRectangle(x1, y1, x2, y2, fill)
-    pointDrawer(points, bitmap, Color.BLACK)
+    pointDrawer(points, bitmap, c)
   }
 
   def outsideBoundBox(x: Int, y: Int, boundingBox: BoundingBox): Boolean = {
-    x < boundingBox.x1 || x > boundingBox.y2 || y < boundingBox.y1 || y > boundingBox.y2
+    x < boundingBox.x1 || x > boundingBox.x2 || y < boundingBox.y1 || y > boundingBox.y2
   }
 
   def removePointsOutsideBoundingBox(points: PointList, boundingBox: BoundingBox): PointList = {
@@ -50,23 +50,33 @@ object DrawingEngine {
     removePoints(points, boundingBox, resultPointList)
   }
 
+  def getColorFromString(c: String): Color = {
+    try {
+      return Class.forName("java.awt.Color").getField(c).get(null).asInstanceOf[Color]
+    } catch {
+      case e: Exception =>
+        return Color.BLACK // Not defined
+
+    }
+  }
+
   @tailrec
   def drawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitmap): Unit = figureList match {
     case List() => Unit
     case f :: tl =>
       f match {
-        case Fill(_, fig) => fig match {
-          case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, boundingBox, fill = true)
+        case Fill(c, fig) => fig match {
+          case Circle(x, y, r) => drawCircle(bitmap, getColorFromString(c), x, y, r, boundingBox, true)
           case Rectangle(x1, y1, x2, y2) =>
-            drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = true)
+            drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, getColorFromString(c), fill = true)
           case _ => return
         }
         case Line(x1, y1, x2, y2) => drawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         case Rectangle(x1, y1, x2, y2) =>
-          drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, fill = false)
+          drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, Color.BLACK, fill = false)
         case Circle(x, y, r) => drawCircle(bitmap, Color.BLACK, x, y, r, boundingBox, fill = false)
         case TextAt(x, y, s) => bitmap.writeText(s, x, y)
-        case BoundingBox(x1, y1, x2, y2) => drawRectangle(x1, y1, x2, y2, bitmap, fill = false)
+        case BoundingBox(x1, y1, x2, y2) => drawRectangle(x1, y1, x2, y2, bitmap, Color.BLACK, fill = false)
         case _ => return
       }
       drawImg(tl, boundingBox, bitmap)
