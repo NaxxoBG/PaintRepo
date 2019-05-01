@@ -38,17 +38,15 @@ object DrawingEngine {
   }
 
   def removePointsOutsideBoundingBox(points: PointList, boundingBox: BoundingBox): PointList = {
-    val resultPointList = PointListNil()
-
     @tailrec
     def removePoints(points: PointList, boundingBox: BoundingBox, resultPoints: PointList): PointList = points match {
-      case PointListNil() => resultPointList;
+      case PointListNil() => resultPoints;
       case PointListCons(Coord(x, y), tl) =>
         if (outsideBoundBox(x, y, boundingBox))
           removePoints(tl, boundingBox, resultPoints)
         else removePoints(tl, boundingBox, PointListCons(Coord(x, y), resultPoints))
     }
-
+    val resultPointList = PointListNil()
     removePoints(points, boundingBox, resultPointList)
   }
 
