@@ -50,15 +50,7 @@ object DrawingEngine {
     removePoints(points, boundingBox, resultPointList)
   }
 
-  def getColorFromString(c: String): Color = {
-    try {
-      return Class.forName("java.awt.Color").getField(c).get(null).asInstanceOf[Color]
-    } catch {
-      case e: Exception =>
-        return Color.BLACK // Not defined
 
-    }
-  }
 
   def DrawListOfFig(c: Color, figList: List[Figure], boundingBox:BoundingBox ,bitmap: RgbBitmap): Unit ={
     figList match {
@@ -81,12 +73,12 @@ object DrawingEngine {
     case f :: tl =>
       f match {
         case Fill(c, fig) => fig match {
-          case Circle(x, y, r) => drawCircle(bitmap, getColorFromString(c), x, y, r, boundingBox, true)
+          case Circle(x, y, r) => drawCircle(bitmap, c, x, y, r, boundingBox, true)
           case Rectangle(x1, y1, x2, y2) =>
-            drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, getColorFromString(c), fill = true)
+            drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, c, fill = true)
           case _ => return
         }
-        case Draw(c, figList) => DrawListOfFig(getColorFromString(c), figList, boundingBox, bitmap)
+        case Draw(c, figList) => DrawListOfFig(c, figList, boundingBox, bitmap)
         case Line(x1, y1, x2, y2) => drawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         case Rectangle(x1, y1, x2, y2) =>
           drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, Color.BLACK, fill = false)

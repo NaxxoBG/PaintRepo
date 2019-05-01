@@ -1,6 +1,18 @@
 package au.controller
 
+import java.awt.Color
+
 object Parser {
+
+  def getColorFromString(c: String): Color = {
+    try {
+      return Class.forName("java.awt.Color").getField(c).get(null).asInstanceOf[Color]
+    } catch {
+      case e: Exception =>
+        return Color.BLACK // Not defined
+
+    }
+  }
 
   def parseFromString(command: String): Figure = command match {
     case LineRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => Line(x1, y1, x2, y2)
@@ -8,8 +20,8 @@ object Parser {
     case RectangleRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => Rectangle(x1, y1, x2, y2)
     case BoundingBoxRegex(AsInt(x1), AsInt(y1), AsInt(x2), AsInt(y2)) => BoundingBox(x1, y1, x2, y2)
     case TextAtRegex(AsInt(x), AsInt(y), t) => TextAt(x, y, t)
-    case FillRegex(c, figure) => Fill(c, parseFromString(figure))
-    case DrawRegex(c, t) => Draw(c, validator.findAllIn(t).map(cmd => parseFromString(cmd)).toList)
+    case FillRegex(c, figure) => Fill(getColorFromString(c), parseFromString(figure))
+    case DrawRegex(c, t) => Draw(getColorFromString(c), validator.findAllIn(t).map(cmd => parseFromString(cmd)).toList)
     case r => Error(r) // could not parse command
   }
 

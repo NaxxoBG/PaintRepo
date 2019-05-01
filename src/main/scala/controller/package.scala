@@ -1,5 +1,6 @@
 package au
 
+import java.awt.Color
 import java.util.Objects
 import java.util.function.Predicate
 
@@ -11,9 +12,9 @@ package object controller {
   case class Circle(x: Int, y: Int, r: Int) extends Figure
   case class TextAt(x: Int, y: Int, t: String) extends Figure
   case class Rectangle(x1: Int, y1: Int, x2: Int, y2: Int) extends Figure
-  case class Draw(c: String, list: List[Figure]) extends Figure
+  case class Draw(c: Color, list: List[Figure]) extends Figure
   case class BoundingBox(x1: Int, y1: Int, x2: Int, y2: Int) extends Figure
-  case class Fill(c: String, figure: Figure) extends Figure
+  case class Fill(c: Color, figure: Figure) extends Figure
   case class Nil() extends Figure
   case class Error(cmd: String) extends Figure
 

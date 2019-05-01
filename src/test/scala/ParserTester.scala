@@ -1,5 +1,7 @@
 package te
 
+import java.awt.Color
+
 import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 import au.controller.Parser._
@@ -48,15 +50,15 @@ class ParserTester extends FunSuite with BeforeAndAfter{
   }
 
   test("FillParser") {
-    assert(parseFromString(fillCommand) == Fill("black", Circle(2,2,1)))
-    assert(parseFromString(fillCommand.toLowerCase()) == Fill("black", Circle(2,2,1)))
-    assert(parseFromString(fillCommand.toUpperCase()) == Fill("black".toUpperCase, Circle(2,2,1)))
+    assert(parseFromString(fillCommand) == Fill(Color.black, Circle(2,2,1)))
+    assert(parseFromString(fillCommand.toLowerCase()) == Fill(Color.BLACK, Circle(2,2,1)))
+    assert(parseFromString(fillCommand.toUpperCase()) == Fill(Color.BLACK, Circle(2,2,1)))
   }
 
   test("DrawParser") {
-    assert(parseFromString(DrawCommand) == Draw("black", List(Circle(2,3,1), Circle(1,2,3))))
-    assert(parseFromString(DrawCommand.toLowerCase()) == Draw("black", List(Circle(2,3,1), Circle(1,2,3))))
-    assert(parseFromString(DrawCommand.toUpperCase) == Draw("black".toUpperCase, List(Circle(2,3,1), Circle(1,2,3))))
+    val expectedList = Draw(Color.BLACK, List(Circle(2,3,1), Circle(1,2,3)))
+    assert(parseFromString(DrawCommand) == expectedList)
+    assert(parseFromString(DrawCommand.toLowerCase()) == expectedList)
   }
 
   test("ParseListOfCommand"){
