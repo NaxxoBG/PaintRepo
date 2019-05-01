@@ -60,6 +60,21 @@ object DrawingEngine {
     }
   }
 
+  def DrawListOfFig(c: Color, figList: List[Figure], boundingBox:BoundingBox ,bitmap: RgbBitmap): Unit ={
+    figList match {
+      case List() => Unit
+      case f :: tl =>
+        f match {
+          case Line(x1, y1, x2, y2) => drawLine(bitmap, c, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
+          case Rectangle(x1, y1, x2, y2) =>
+            drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, c, fill = false)
+          case Circle(x, y, r) => drawCircle(bitmap, c, x, y, r, boundingBox, fill = false)
+          case _ => return
+        }
+        DrawListOfFig(c, tl, boundingBox, bitmap)
+    }
+  }
+
   @tailrec
   def drawImg(figureList: List[Figure], boundingBox: BoundingBox, bitmap: RgbBitmap): Unit = figureList match {
     case List() => Unit
@@ -71,6 +86,7 @@ object DrawingEngine {
             drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, getColorFromString(c), fill = true)
           case _ => return
         }
+        case Draw(c, figList) => DrawListOfFig(getColorFromString(c), figList, boundingBox, bitmap)
         case Line(x1, y1, x2, y2) => drawLine(bitmap, Color.BLACK, math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2))
         case Rectangle(x1, y1, x2, y2) =>
           drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, Color.BLACK, fill = false)
