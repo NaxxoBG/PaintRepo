@@ -2,6 +2,7 @@ package au.controller
 
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.util.Optional
 
 import au.controller.BresenhamLineAlgorithm._
 import au.controller.Parser._
@@ -52,7 +53,7 @@ object DrawingEngine {
 
 
 
-  def DrawListOfFig(c: Color, figList: List[Figure], boundingBox:BoundingBox ,bitmap: RgbBitmap): Unit ={
+  def DrawListOfFig(c: Color, figList: List[Figure], boundingBox:BoundingBox, bitmap: RgbBitmap): Unit ={
     figList match {
       case List() => Unit
       case f :: tl =>
@@ -73,7 +74,7 @@ object DrawingEngine {
     case f :: tl =>
       f match {
         case Fill(c, fig) => fig match {
-          case Circle(x, y, r) => drawCircle(bitmap, c, x, y, r, boundingBox, true)
+          case Circle(x, y, r) => drawCircle(bitmap, c, x, y, r, boundingBox, fill = true)
           case Rectangle(x1, y1, x2, y2) =>
             drawRectangle(math.max(x1, boundingBox.x1), math.max(y1, boundingBox.y1), math.min(x2, boundingBox.x2), math.min(y2, boundingBox.y2), bitmap, c, fill = true)
           case _ => return
@@ -97,14 +98,14 @@ object DrawingEngine {
     * @param commands String
     * @return BufferedImage
     */
-  def drawSyntaxTree(commands: String, width: Int, height: Int): BufferedImage = {
+  def drawSyntaxTree(commands: String, width: Int, height: Int): (BufferedImage, String) = {
     val bitMapping = new RgbBitmap(width, height)
     bitMapping.image.createGraphics()
     bitMapping.fill(Color.WHITE)
     val syntaxTree = generateAbstractSyntaxTree(commands)
     if (isSyntaxTreeValid(syntaxTree)) {
       drawImg(syntaxTree, syntaxTree.head.asInstanceOf[BoundingBox], bitMapping)
-    }
-    bitMapping.image
+      (bitMapping.image, "No errors")
+    } else (bitMapping.image, syntaxTree.collect { case Error(r) => r }.mkString("Syntax errors:\n", "\n", ""))
   }
 }

@@ -1,6 +1,7 @@
 package au.view;
 
 import au.controller.DrawingEngine;
+import scala.Tuple2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,17 +25,21 @@ public class PanelCanvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g.create();
         if (!Objects.isNull(this.commands) && !this.commands.isEmpty()) {
             System.out.println("Editor pane text: " + this.commands);
             try {
-                BufferedImage img = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
-                g.translate(0, this.getHeight());
-                ((Graphics2D) g).scale(1, -1);
-                g.drawImage(img, 0, 0, this);
+                Tuple2<BufferedImage, String> imgRes = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
+                g2.translate(0, this.getHeight());
+                g2.scale(1, -1);
+                g2.drawImage(imgRes._1, 0, 0, this);
+                if (!imgRes._2.equals("No errors")) {
+                    this.parent.reportErrors(imgRes._2);
+                }
             } catch (ArrayIndexOutOfBoundsException e) {
                 this.parent.reportErrors(e.getMessage());
             }
-
+        g2.dispose();
         }
     }
 }
