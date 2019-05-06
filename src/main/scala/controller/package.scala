@@ -39,7 +39,7 @@ package object controller {
   val CircleRegex: Regex = "\\((?i)Circle\\((\\d+) (\\d+)\\) (\\d+)\\)".r
   val RectangleRegex: Regex = "\\((?i)Rectangle\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
   val TextAtRegex: Regex = "\\((?i)Text-At\\((\\d+) (\\d+)\\) (.*)\\)".r
-  val DrawRegex: Regex = "\\((?i)Draw\\(([a-zA-Z]*) (.*)\\)\\)".r
+  val DrawRegex: Regex = "\\((?i)Draw\\(([a-zA-Z]*) (.*\\))\\)\\)".r
   val BoundingBoxRegex: Regex = "\\((?i)Bounding-Box\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
   val FillRegex: Regex = "\\((?i)Fill\\(([a-zA-Z]*) (.*)\\)\\)".r
   val validator: Regex = "(?i)(\\([a-z]+(?:\\-[a-z]+)?\\(\\d+ \\d+\\)(?: (?:\\d+|[a-z ]+|\\(\\d+ \\d+\\)))?\\))".r

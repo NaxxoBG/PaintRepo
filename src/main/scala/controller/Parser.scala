@@ -39,6 +39,6 @@ object Parser {
     array.collect { case fig: BoundingBox => fig }.length == 1 &&
       array.collect {
         case f : Error => f
-        case Fill(_, r: Error) => r // same filtering should occur for draw errors as well
+        case Fill(_, r: Error) => r //@ToDo filtering for Error objects in the Draw command should be done as well
       }.isEmpty
 }
