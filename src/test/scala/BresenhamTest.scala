@@ -14,8 +14,6 @@ class BresenhamTest extends FunSuite{
     result
   }
 
-
-
   test("MidpointTestRadius1"){
     val expectedPointList = PointListCons(Coord(1,0), PointListCons(Coord(0,1), PointListCons(Coord(-1,0), PointListCons(Coord(0,-1), PointListNil()))))
     val pointList = BresenhamLineAlgorithm.midpointWrapper(0,0, 1)

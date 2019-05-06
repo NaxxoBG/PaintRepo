@@ -42,7 +42,7 @@ package object controller {
   val DrawRegex: Regex = "\\((?i)Draw\\(([a-zA-Z]*) (.*)\\)\\)".r
   val BoundingBoxRegex: Regex = "\\((?i)Bounding-Box\\((\\d+) (\\d+)\\) \\((\\d+) (\\d+)\\)\\)".r
   val FillRegex: Regex = "\\((?i)Fill\\(([a-zA-Z]*) (.*)\\)\\)".r
-  val validator: Regex = "(?i)(\\([a-z]+(?:\\-[a-z]+)?\\(\\d+ \\d+\\)(?: (?:\\d|[a-z ]+|\\(\\d+ \\d+\\)))?\\))".r
+  val validator: Regex = "(?i)(\\([a-z]+(?:\\-[a-z]+)?\\(\\d+ \\d+\\)(?: (?:\\d+|[a-z ]+|\\(\\d+ \\d+\\)))?\\))".r
 
   object AsInt {
     def unapply(s: String): Option[Int] = try {

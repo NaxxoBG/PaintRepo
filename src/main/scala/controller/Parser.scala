@@ -6,11 +6,10 @@ object Parser {
 
   def getColorFromString(c: String): Color = {
     try {
-      return Class.forName("java.awt.Color").getField(c).get(null).asInstanceOf[Color]
+      Class.forName("java.awt.Color").getField(c).get(null).asInstanceOf[Color]
     } catch {
-      case e: Exception =>
-        return Color.BLACK // Not defined
-
+      case _: Exception =>
+        Color.BLACK // Not defined
     }
   }
 
@@ -38,5 +37,8 @@ object Parser {
   def isSyntaxTreeValid(array: List[Figure]): Boolean =
     array.head.isInstanceOf[BoundingBox] &&
     array.collect { case fig: BoundingBox => fig }.length == 1 &&
-      array.collect { case fig: Error => fig }.isEmpty
+      array.collect {
+        case f : Error => f
+        case Fill(_, r: Error) => r // same filtering should occur for draw errors as well
+      }.isEmpty
 }

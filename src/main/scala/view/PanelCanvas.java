@@ -27,7 +27,7 @@ public class PanelCanvas extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         if (!Objects.isNull(this.commands) && !this.commands.isEmpty()) {
-            System.out.println("Editor pane text: " + this.commands);
+            System.out.println("Editor pane text: \n" + this.commands);
             try {
                 Tuple2<BufferedImage, String> imgRes = DrawingEngine.drawSyntaxTree(this.commands, this.getWidth(), this.getHeight());
                 g2.translate(0, this.getHeight());

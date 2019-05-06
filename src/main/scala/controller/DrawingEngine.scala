@@ -2,7 +2,6 @@ package au.controller
 
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.util.Optional
 
 import au.controller.BresenhamLineAlgorithm._
 import au.controller.Parser._
@@ -50,8 +49,6 @@ object DrawingEngine {
     val resultPointList = PointListNil()
     removePoints(points, boundingBox, resultPointList)
   }
-
-
 
   def DrawListOfFig(c: Color, figList: List[Figure], boundingBox:BoundingBox, bitmap: RgbBitmap): Unit ={
     figList match {
@@ -106,6 +103,13 @@ object DrawingEngine {
     if (isSyntaxTreeValid(syntaxTree)) {
       drawImg(syntaxTree, syntaxTree.head.asInstanceOf[BoundingBox], bitMapping)
       (bitMapping.image, "No errors")
-    } else (bitMapping.image, syntaxTree.collect { case Error(r) => r }.mkString("Syntax errors:\n", "\n", ""))
+    } else {
+      if (!syntaxTree.head.getClass.getSimpleName.equals("BoundingBox")) {
+        (bitMapping.image, "Syntax errors:\nNo bounding box specified")
+      } else {
+        // filtering for Error objects in the Draw command should be done as well
+        (bitMapping.image, syntaxTree.collect { case Error(r) => r; case Fill(_, Error(s)) => s}.mkString("Syntax errors:\n", "\n", ""))
+      }
+    }
   }
 }

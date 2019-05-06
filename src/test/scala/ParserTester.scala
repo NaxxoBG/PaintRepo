@@ -7,7 +7,6 @@ import org.scalatest.BeforeAndAfter
 import au.controller.Parser._
 import au.controller._
 
-
 class ParserTester extends FunSuite with BeforeAndAfter{
   val LineCommand = "(LinE(2 3) (4 5))"
   val CircleCommand = "(Circle(1 2) 2)"
@@ -17,7 +16,6 @@ class ParserTester extends FunSuite with BeforeAndAfter{
   val boundingBoxCommand = "(Bounding-Box(2 1) (2 3))"
   val fillCommand = "(Fill(black (Circle(2 2) 1)))"
   val errorCommand = "Fill(black, black)"
-
 
   test("LineParser") {
     assert(parseFromString(LineCommand) == Line(2,3,4,5))
@@ -72,6 +70,4 @@ class ParserTester extends FunSuite with BeforeAndAfter{
     assert(tree.length == 3)
     assert(isSyntaxTreeValid(tree))
   }
-
-
 }

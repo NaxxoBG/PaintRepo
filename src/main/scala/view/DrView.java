@@ -137,7 +137,7 @@ public class DrView
 		mnMenu.add(menuItemSave);
 	}
 
-	public void reportErrors(String errors) {
+	void reportErrors(String errors) {
 		SwingUtilities.invokeLater(() -> {
 			if(!Objects.isNull(txtPaneError)) {
 				txtPaneError.setText(errors);
