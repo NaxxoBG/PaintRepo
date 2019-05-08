@@ -1,0 +1,146 @@
+import org.sireum.logika._
+
+
+  def PlotPointOnALineOneDimension(x0: Z, x1: Z):Z =
+  {
+    l"""{
+          requires  x0 <= x1
+          ensures   result >= x0
+                    result <= x1
+    }"""
+    val dx:Z = x1 - x0
+
+    //Vertical
+    if (dx == 0) {
+        l"""{
+              1. dx ==  0 premise
+        }"""
+
+        val rX :Z = x0
+        l"""{
+              1. rX == x0 premise
+              2. rX >= x0 algebra 1
+              3. x0 <= x1 premise
+              4. rX <= x1 subst2 1 3
+        }"""
+        return rX
+    }else{
+        l"""{
+              1. !(dx == 0) premise
+              2. dx == x1 - x0 premise
+              3. x0 <= x1 premise
+              4. dx >= 0 algebra 1 2 3
+              5. dx > 0 algebra 1 4
+        }"""
+        val rX :Z = x0 + 1
+        l"""{
+              1. rX == x0 + 1 premise
+              2. rX >= x0 algebra 1
+              3. dx > 0 premise
+              4. dx == x1 - x0 premise
+              5. x0 < x1  algebra 3 4
+              6. x0 + 1 <= x1 algebra 5
+              7. rX <= x1 algebra 1 6
+        }"""
+        return rX
+    }
+  }
+
+  val x0:Z = readInt()
+  val x1:Z = readInt()
+  var rX:Z = x0
+  assume(x0 < x1)
+  var x:Z = x0
+    l"""{
+        1. x == x0 premise
+        2. x0 < x1 premise
+        3. x >= x0 algebra 1
+        4. x < x1 subst2 1 2
+        5. rX == x0 premise
+        6. rX >= x0 algebra 5
+        7. rX < x1 subst2 5 2
+        8. rX <= x1 algebra 7
+        9. x <= x1 algebra 4
+     }"""
+
+    val y0:Z = readInt()
+    val y1:Z = readInt()
+    var rY:Z = y0
+    assume(y0 < y1)
+    var y:Z = y0
+     l"""{
+         1. y == y0 premise
+         2. y0 < y1 premise
+         3. y >= y0 algebra 1
+         4. y < y1 subst2 1 2
+         5. rY == y0 premise
+         6. rY >= y0 algebra 5
+         7. rY < y1 subst2 5 2
+         8. rY <= y1 algebra 7
+         9. y <= y1 algebra 4
+      }"""
+
+while(x < x1 | y < y1){
+    l"""{ invariant rX >= x0
+                    rX <= x1
+                    x >= x0
+                    x ≤ x1
+                    rY >= y0
+                    rY <= y1
+                    y >= y0
+                    y ≤ y1
+          modifies rX, x, rY, y}"""
+    l"""{
+        1. x >= x0 premise
+        2. x <= x1 premise
+        3. y >= y0 premise
+        4. y <= y1 premise
+      }"""
+
+
+     if(x < x1){
+         rX = PlotPointOnALineOneDimension(x, x1)
+         l"""{
+             1. rX >= x premise
+             2. rX <= x1 premise
+             3. x >= x0 premise
+             4. rX >= x0 algebra 1 3
+          }"""
+
+
+         x = x + 1
+      l"""{
+          1. x_old < x1 premise
+          2. x = x_old + 1 premise
+          3. x <= x1 algebra 1 2
+          4. x_old >= x0 premise
+          5. x > x_old algebra 2
+          6. x >= x0 algebra 4 5
+      }"""
+     }
+
+
+
+     if(y < y1){
+    rY = PlotPointOnALineOneDimension(y, y1)
+    l"""{
+        1. rY >= y premise
+        2. rY <= y1 premise
+        3. y >= y0 premise
+        4. rY >= y0 algebra 1 3
+     }"""
+
+    y = y + 1
+
+  l"""{
+      1. y_old < y1 premise
+      2. y = y_old + 1 premise
+      3. y <= y1 algebra 1 2
+      4. y_old >= y0 premise
+      5. y > y_old algebra 2
+      6. y >= y0 algebra 4 5
+  }"""
+  }
+}
+
+
