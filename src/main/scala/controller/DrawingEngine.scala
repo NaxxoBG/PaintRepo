@@ -104,14 +104,15 @@ object DrawingEngine {
       drawImg(syntaxTree, syntaxTree.head.asInstanceOf[BoundingBox], bitMapping)
       (bitMapping.image, "No errors")
     } else {
-      if (!syntaxTree.head.getClass.getSimpleName.equals("BoundingBox")) {
+      if (!syntaxTree.head.isInstanceOf[BoundingBox]) {
         (bitMapping.image, "Syntax errors:\nNo bounding box specified")
       } else {
-        //@ToDo filtering for Error objects in the Draw command should be done as well
-        (bitMapping.image, syntaxTree.collect {
-          case Error(r) => r
-          case Fill(_, Error(s)) => s
-        }.mkString("Syntax errors:\n", "\n", ""))
+        val errors = syntaxTree.collect {
+          case Error(r) => List(r)
+          case Fill(_, Error(s)) => List(s)
+          case Draw(_, ls) => ls.filter(_.isInstanceOf[Error]).collect{case Error(r2) => r2}
+        }.flatten.mkString("Syntax errors:\n", "\n", "")
+        (bitMapping.image, errors)
       }
     }
   }
