@@ -47,23 +47,27 @@ object BresenhamLineAlgorithm {
 
   def LineRc(x0: Int, y0: Int, x1: Int, y1: Int, err: Double, list: PointList): PointList = //list match
   {
-    val dx = DeltaCalc(x0, x1)
-    val dy = DeltaCalc(y0, y1)
-    val resultList = concat(list, PointListCons(Coord(x0, y0), PointListNil()))
+    val x0org = math.min(x0,x1)
+    val x1org = math.max(x0,x1)
+    val y0org = math.min(y0,y1)
+    val y1org = math.max(y0,y1)
+    val dx = DeltaCalc(x0org, x1org)
+    val dy = DeltaCalc(y0org, y1org)
+    val resultList = concat(list, PointListCons(Coord(x0org, y0org), PointListNil()))
     if (dx == 0 && dy == 0) {
       return resultList
     } //Done
     if (dx == 0 || dy == 0) {
-      return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
+      return LineRc(x0org + Sign(dx), y0org + Sign(dy), x1org, y1org, err, resultList)
     } //is vertical or horizontal
 
     val der = FindDErr(dx, dy)
     val plotErr = err + der
 
     if (plotErr >= 0.5)
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
+      LineRc(x0org + Sign(dx), y0org + Sign(dy), x1org, y1org, plotErr - 1.0, resultList)
     else
-      LineRc(x0 + Sign(dx), y0, x1, y1, plotErr, resultList)
+      LineRc(x0org + Sign(dx), y0org, x1org, y1org, plotErr, resultList)
   }
 
   def LineWrapper(x0: Int, y0: Int, x1: Int, y1: Int): PointList = {
