@@ -45,9 +45,8 @@ object BresenhamLineAlgorithm {
     }
   }
 
-  def LineRc(x0: Int, y0: Int, x1: Int, y1: Int, err: Double, list: PointList): PointList = //list match
+  def LineRc(x0: Int, y0: Int, x1: Int, y1: Int, err: Double, list: PointList): PointList =
   {
-
     val dx = DeltaCalc(x0, x1)
     val dy = DeltaCalc(y0, y1)
     val resultList = concat(list, PointListCons(Coord(x0, y0), PointListNil()))
@@ -57,31 +56,28 @@ object BresenhamLineAlgorithm {
     if (dx == 0 || dy == 0) {
       return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
     } //is vertical or horizontal
-    if(dx > dy)
-    {val der = FindDErr(dx, dy)
-    val plotErr = err + der
-
-    if (plotErr >= 0.5)
-      LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
-    else
-      LineRc(x0 + Sign(dx), y0, x1, y1, plotErr, resultList)}
-    else
-      {
-        val der = FindDErr(dy, dx)
-        val plotErr = err + der
-
-        if (plotErr >= 0.5)
-          LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
-        else
-          LineRc(x0, y0 + Sign(dy), x1, y1, plotErr, resultList)
-      }
+    if (dx > dy) {
+      val der = FindDErr(dx, dy)
+      val plotErr = err + der
+      if (plotErr >= 0.5)
+        LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
+      else
+        LineRc(x0 + Sign(dx), y0, x1, y1, plotErr, resultList)
+    } else {
+      val der = FindDErr(dy, dx)
+      val plotErr = err + der
+      if (plotErr >= 0.5)
+        LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, plotErr - 1.0, resultList)
+      else
+        LineRc(x0, y0 + Sign(dy), x1, y1, plotErr, resultList)
+    }
   }
 
   def LineWrapper(x0: Int, y0: Int, x1: Int, y1: Int): PointList = {
-    val x0org = math.min(x0,x1)
-    val x1org = math.max(x0,x1)
-    val y0org = math.min(y0,y1)
-    val y1org = math.max(y0,y1)
+    val x0org = math.min(x0, x1)
+    val x1org = math.max(x0, x1)
+    val y0org = math.min(y0, y1)
+    val y1org = math.max(y0, y1)
     LineRc(x0org, y0org, x1org, y1org, 0, PointListNil())
   }
 
