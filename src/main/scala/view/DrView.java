@@ -2,6 +2,8 @@ package au.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -71,6 +73,8 @@ public class DrView
 		panelCanvas.setBackground(Color.WHITE);
 		frame.getContentPane().add(panelCanvas);
 
+		panelCanvas.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, Color.LIGHT_GRAY, Color.GRAY, Color.DARK_GRAY));
+
 		JButton btnDraw = new JButton("Draw");
 		btnDraw.setFocusable(false);
 		btnDraw.addActionListener(e ->
@@ -99,7 +103,17 @@ public class DrView
 		txtPaneError.setEditable(false);
 		txtPaneError.setBackground(SystemColor.menu);
 		frame.getContentPane().add(txtPaneError);
-		
+
+		JSeparator separator = new JSeparator();
+		springLayout.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, txtPaneError, 6, SpringLayout.SOUTH, separator);
+		springLayout.putConstraint(SpringLayout.NORTH, separator, 13, SpringLayout.SOUTH, scriptEditor);
+		springLayout.putConstraint(SpringLayout.SOUTH, separator, -5, SpringLayout.NORTH, btnDraw);
+		springLayout.putConstraint(SpringLayout.WEST, separator, -10, SpringLayout.WEST, frame.getContentPane());
+		separator.setForeground(Color.GRAY);
+		separator.setBackground(Color.DARK_GRAY);
+		frame.getContentPane().add(separator);
+
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(SystemColor.menu);
 		frame.setJMenuBar(menuBar);
