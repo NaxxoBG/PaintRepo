@@ -56,7 +56,7 @@ object BresenhamLineAlgorithm {
     if (dx == 0 || dy == 0) {
       return LineRc(x0 + Sign(dx), y0 + Sign(dy), x1, y1, err, resultList)
     } //is vertical or horizontal
-    if (dx > math.abs(dy)) {
+    if (math.abs(dx) > math.abs(dy)) {
       val der = FindDErr(dx, dy)
       val plotErr = err + der
       if (plotErr >= 0.5)
@@ -74,9 +74,7 @@ object BresenhamLineAlgorithm {
   }
 
   def LineWrapper(x0: Int, y0: Int, x1: Int, y1: Int): PointList = {
-    val x0org = math.min(x0, x1)
-    val x1org = math.max(x0, x1)
-    LineRc(x0org, y0, x1org, y1, 0, PointListNil())
+    LineRc(x0, y0, x1, y1, 0, PointListNil())
   }
 
   def CircleCoordinatesEvery45deg(x0: Int, y0: Int, x: Int, y: Int, pointList: PointList): PointList = {
