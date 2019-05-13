@@ -1,5 +1,7 @@
 package au.model
 
+import java.awt.font.FontRenderContext
+import java.awt.geom.Rectangle2D
 import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
 
@@ -20,9 +22,11 @@ class RgbBitmap(val width: Int, val height: Int) {
 
   def writeText(txt: String, x: Int, y: Int): Unit = {
     val g = image.createGraphics
-    g.setFont(new Font("TimesRoman", Font.PLAIN, 14))
+    val font = new Font("TimesRoman", Font.PLAIN, 14)
     g.setColor(Color.BLACK)
-    g.drawString(txt, x, y)
+    g.setFont(font)
+    g.scale(1, -1)
+    g.drawString(txt, x, -y)
     g.dispose()
   }
 }
