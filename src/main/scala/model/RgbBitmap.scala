@@ -1,11 +1,9 @@
 package au.model
 
-import java.awt.font.FontRenderContext
-import java.awt.geom.Rectangle2D
-import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
+import java.awt.{Color, Font}
 
-//Bitmap class taken from https://rosettacode.org/wiki/Bitmap#Scala
+//see also https://rosettacode.org/wiki/Bitmap#Scala
 class RgbBitmap(val width: Int, val height: Int) {
   val image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
 
